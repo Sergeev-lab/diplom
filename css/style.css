@@ -1,0 +1,61 @@
+html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swiper-container .mySwiper {
+        background: #000;
+        min-height: 34.94792vw;
+        display: flex;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        z-index: 1;
+        transition-duration: 0ms;
+      }
+
+      .swiper-slide {
+        font-size: 18px;
+        color: #fff;
+        padding: 40px 60px;
+        opacity: 1;
+        height: 100%;
+        position: relative;
+        background-size: cover;
+        background-position: 24% 0;
+        text-align: right;
+      }
+
+      .swiper-slide .title {
+        font-size: 41px;
+        font-weight: 300;
+      }
+
+      .swiper-slide .subtitle {
+        font-size: 21px;
+      }
+
+      .swiper-slide .text {
+        font-size: 14px;
+        max-width: 400px;
+        height: 100px;
+        line-height: 1.3;
+        display: inline-block;
+      }
+
+      .swiper-slide .btn {
+        font-size: 14px;
+        
+        
+      }
