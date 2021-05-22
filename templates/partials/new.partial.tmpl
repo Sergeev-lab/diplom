@@ -1,12 +1,12 @@
 {{define "slide"}}
-<div class="swiper-slide" style="background-image: url({{.Slider.Img}})">
-  <div class="title" data-swiper-parallax="-300">{{.Slider.Title}}</div>
-  <div class="subtitle" data-swiper-parallax="-200">{{.Slider.Subtitle}} 1</div>
+<div class="swiper-slide" style="background-image: url({{.Img}})">
+  <div class="title" data-swiper-parallax="-300">{{.Title}}</div>
+  <div class="subtitle" data-swiper-parallax="-200">{{.Subtitle}}</div>
   <div class="text" data-swiper-parallax="-100">
     <p>
-      {{.Slider.Description}}
+      {{.Description}}
     </p>
-    <button type="button" class="btn btn-outline-light">{{.Slider.Btn}}</button>
+    <button type="button" class="btn btn-outline-light">{{.Btn}}</button>
   </div>
 </div>
 {{end}}
@@ -33,7 +33,7 @@
       <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол (3)</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link disabled" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол (0)</a>
+      <a class="nav-link" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол (0)</a>
     </li>
   </ul>
 </div>

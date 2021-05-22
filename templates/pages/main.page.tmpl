@@ -7,7 +7,9 @@
 {{define "slider"}}
 <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper-container mySwiper">
   <div class="swiper-wrapper">
-    {{template "slide" .}}
+    {{range .Slider}}
+      {{template "slide" .}}
+    {{end}}
   </div>
   <div class="swiper-button-next"></div>
   <div class="swiper-button-prev"></div>
@@ -20,15 +22,120 @@
 {{end}}
 
 {{define "hockey"}}
-Хоккей
+<div class="page">
+  <div class="head">
+    <h2 class="heading-component-title">Хоккей</h2>
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger active" href="#">Live</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">Календарь</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">История</a>
+        </li>
+      </ul>
+  </div>
+  <div class="content">
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th colspan="3">
+            <a href="#collapseExample">
+              КХЛ
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"></td>
+          <td><a href="#">АкБарс - Авангард</a></td>
+          <td>3 - 2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {{end}}
 
 {{define "volleyball"}}
-Волейбол
+<div class="page">
+  <div class="head">
+    <h2 class="heading-component-title">Волейбол</h2>
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger active" href="#">Live</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">Календарь</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">История</a>
+        </li>
+      </ul>
+  </div>
+  <div class="content">
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th colspan="3">
+            <a href="#collapseExample">
+              Лига ВТБ
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"></td>
+          <td><a href="#">Екатеринбург - Пенза</a></td>
+          <td>1 - 0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {{end}}
 
 {{define "table_tennis"}}
-Настольный теннис
+<div class="page">
+  <div class="head">
+    <h2 class="heading-component-title">Настольный теннис</h2>
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger active" href="#">Live</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">Календарь</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">История</a>
+        </li>
+      </ul>
+  </div>
+  <div class="content">
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th colspan="3">
+            <a href="#collapseExample">
+              Мастерс
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/img/sport-icons/ping-pong.svg" alt="Хоккей"></td>
+          <td><a href="#">Андрей Дергунов - Денис Медведев</a></td>
+          <td>1 - 0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {{end}}
 
 {{define "field_hockey"}}
@@ -67,9 +174,80 @@
 {{end}}
 
 {{define "basketball"}}
-Баскетбол
+<div class="page">
+  <div class="head">
+    <h2 class="heading-component-title">Баскетбол</h2>
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger active" href="#">Live</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">Календарь</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">История</a>
+        </li>
+      </ul>
+  </div>
+  <div class="content">
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th colspan="3">
+            <a href="#collapseExample">
+              NBL
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/img/sport-icons/basketball-ball.svg" alt="Хоккей"></td>
+          <td><a href="#">Уникс - ЦСКА</a></td>
+          <td>50 - 42</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {{end}}
 
 {{define "football"}}
-Футбол
+<div class="page">
+  <div class="head">
+    <h2 class="heading-component-title">Футбол</h2>
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger active" href="#">Live</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">Календарь</a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn btn-sm btn-outline-danger" href="#">История</a>
+        </li>
+      </ul>
+  </div>
+  <div class="content">
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th colspan="3">
+            <span><img src="/img/uefa.png" width="50px" height="50px" alt="УЕФА"></span>
+            <a href="#collapseExample">
+              УЕФА
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="/img/sport-icons/football.svg" alt="Хоккей"></td>
+          <td><a href="#">Манчестер Сити - Челси</a></td>
+          <td>1 - 0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {{end}}

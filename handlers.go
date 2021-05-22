@@ -9,6 +9,7 @@ import (
 )
 
 type slider struct {
+	Id string
 	Img string
 	Title string
 	Subtitle string
@@ -65,23 +66,17 @@ type content struct {
 }
 
 type data struct {
-	Slider slider
+	Slider []slider
 	Content content
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	
 	send := data {
-		Slider: slider {
-			Img: "img/slider-1-slide-1-1920x670.jpg",
-			Title: "Самый первый",
-			Subtitle: "Подзаголовок",
-			Description: "Основной текст",
-			Btn: "Текст на кнопке",
-		},
+		Slider: Slider(),
 		Content: content {
 			FieldHockey: feildhockey {
-				Header: "Хоккейна траве",
+				Header: "Хоккей на траве",
 				Href: "/field_hockey/",
 				Sorevnovanie: sorevnovanie {
 					Id: "3",
