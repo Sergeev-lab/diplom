@@ -1,0 +1,48 @@
+{{define "slide"}}
+<div class="swiper-slide" style="background-image: url({{.Slider.Img}})">
+  <div class="title" data-swiper-parallax="-300">{{.Slider.Title}}</div>
+  <div class="subtitle" data-swiper-parallax="-200">{{.Slider.Subtitle}} 1</div>
+  <div class="text" data-swiper-parallax="-100">
+    <p>
+      {{.Slider.Description}}
+    </p>
+    <button type="button" class="btn btn-outline-light">{{.Slider.Btn}}</button>
+  </div>
+</div>
+{{end}}
+
+{{define "menu_item"}}
+<div class="menu-item">
+  <ul class="nav nav-tabs nav-fill">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#all"><span><img src="/img/sport-icons/soccer-cup.svg" alt="Все"><br></span>Все (15)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#hockey"><span><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"><br></span>Хоккей (3)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#volleyball"><span><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"><br></span>Волейбол (2)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#table_tennis"><span><img src="/img/sport-icons/ping-pong.svg" alt="Настольный теннис"><br></span>Настольный теннис (1)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#field_hockey"><span><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"><br></span>Хоккей на траве (6)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол (3)</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол (0)</a>
+    </li>
+  </ul>
+</div>
+{{end}}
+
+{{define "match"}}
+<tr>
+  <td><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"></td>
+  <td><a href="#">АкБарс - Москва</a></td>
+  <td>5 - 0</td>
+</tr>
+{{end}}
