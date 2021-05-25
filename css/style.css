@@ -136,5 +136,16 @@
     line-height: 1.2;
   }
 
+  .page .content .table tbody tr td:first-child {
+    width: 30px;
+  }
+
+  .page .content .table tbody tr:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  }
+
+  .page .content .table tbody tr td:nth-child(2) {
+    width: 500px;
+  }
 
   /* End Tab content */

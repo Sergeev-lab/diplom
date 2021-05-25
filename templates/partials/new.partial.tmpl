@@ -41,8 +41,27 @@
 
 {{define "match"}}
 <tr>
-  <td><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"></td>
-  <td><a href="#">АкБарс - Москва</a></td>
+  <td><img src="/img/sport-icons/field-hockey.svg" alt=""></td>
+  <td><a href="#">{{.Fcommand.Name}} - {{.Scommand.Name}}</a></td>
   <td>5 - 0</td>
 </tr>
+{{end}}
+
+{{define "sorevnovanie"}}
+<table class="table">
+  <thead class="thead-inverse">
+    <tr>
+      <th colspan="3">
+        <a href="#collapseExample">
+          hren
+        </a>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .Field_hockey}}
+      {{template "match" .}}
+    {{end}}
+  </tbody>
+</table>
 {{end}}

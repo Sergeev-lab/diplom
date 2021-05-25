@@ -17,10 +17,6 @@
 </div>
 {{end}}
 
-{{define "all"}}
-Все записи
-{{end}}
-
 {{define "hockey"}}
 <div class="page">
   <div class="head">
@@ -141,34 +137,21 @@
 {{define "field_hockey"}}
 <div class="page">
   <div class="head">
-    <h2 class="heading-component-title">Хоккей на траве (3)</h2>
+    <h2 class="heading-component-title">Хоккей на траве</h2>
       <ul class="list-inline">
         <li class="list-inline-item">
-          <a class="btn btn-sm btn-outline-danger active" href="#">Live</a>
+          <a class="btn btn-sm btn-outline-danger active" href="">Live</a>
         </li>
         <li class="list-inline-item">
-          <a class="btn btn-sm btn-outline-danger" href="#">Календарь</a>
+          <a class="btn btn-sm btn-outline-danger" href="calendar">Календарь</a>
         </li>
         <li class="list-inline-item">
-          <a class="btn btn-sm btn-outline-danger" href="#">История</a>
+          <a class="btn btn-sm btn-outline-danger" href="history">История</a>
         </li>
       </ul>
   </div>
   <div class="content">
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th colspan="3">
-            <a href="#collapseExample">
-              Кубок России
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {{template "match" .}}
-      </tbody>
-    </table>
+    {{template "sorevnovanie" .}}
   </div>
 </div>
 {{end}}
