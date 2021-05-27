@@ -35,6 +35,7 @@ type matches struct {
 	Scommand commands
 	Data string
 	Sorevnovanie sorevnovanie
+	Total string
 }
 
 type person struct {

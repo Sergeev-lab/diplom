@@ -8,7 +8,7 @@
 
   <title>{{template "title" .}}</title>
 
-  <link rel="icon" href="" type="image/x-icon">
+  <link rel="icon" href="/img/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
   <link rel="stylesheet" href="/css/style.css"/>
@@ -50,12 +50,24 @@
     {{template "menu_item" .}}
     <div class="tab-content">
       <div class="tab-pane fade show active" id="all">
-        {{template "hockey" .}}
-        {{template "volleyball" .}}
-        {{template "table_tennis" .}}
-        {{template "field_hockey" .}}
-        {{template "basketball" .}}
-        {{template "football" .}}
+        <div v-show="visible">
+          {{template "hockey" .}}
+        </div>
+        <div id="volleyball">
+          {{template "volleyball" .}}
+        </div>
+        <div id="table_tennis">
+          {{template "table_tennis" .}}
+        </div>
+        <div id="field_hockey">
+          {{template "field_hockey" .}}
+        </div>
+        <div id="basketball">
+          {{template "basketball" .}}
+        </div>
+        <div id="football">
+          {{template "football" .}}
+        </div>
       </div>
       <div class="tab-pane fade" id="hockey">
         {{template "hockey" .}}

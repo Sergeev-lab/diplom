@@ -15,25 +15,25 @@
 <div class="menu-item">
   <ul class="nav nav-tabs nav-fill">
     <li class="nav-item">
-      <a class="nav-link active" data-toggle="tab" href="#all"><span><img src="/img/sport-icons/soccer-cup.svg" alt="Все"><br></span>Все (15)</a>
+      <a class="nav-link active" data-toggle="tab" href="#all"><span><img src="/img/sport-icons/soccer-cup.svg" alt="Все"><br></span>Все</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#hockey"><span><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"><br></span>Хоккей (3)</a>
+      <a class="nav-link" data-toggle="tab" href="#hockey"><span><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"><br></span>Хоккей</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#volleyball"><span><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"><br></span>Волейбол (2)</a>
+      <a class="nav-link" data-toggle="tab" href="#volleyball"><span><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"><br></span>Волейбол</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#table_tennis"><span><img src="/img/sport-icons/ping-pong.svg" alt="Настольный теннис"><br></span>Настольный теннис (1)</a>
+      <a class="nav-link" data-toggle="tab" href="#table_tennis"><span><img src="/img/sport-icons/ping-pong.svg" alt="Настольный теннис"><br></span>Настольный теннис</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#field_hockey"><span><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"><br></span>Хоккей на траве (6)</a>
+      <a class="nav-link" data-toggle="tab" href="#field_hockey"><span><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"><br></span>Хоккей на траве</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол (3)</a>
+      <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол (0)</a>
+      <a class="nav-link" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол</a>
     </li>
   </ul>
 </div>
@@ -42,8 +42,8 @@
 {{define "match"}}
 <tr>
   <td><img src="/img/sport-icons/field-hockey.svg" alt=""></td>
-  <td><a href="#">{{.Fcommand.Name}} - {{.Scommand.Name}}</a></td>
-  <td>5 - 0</td>
+  <td><a href="mathc?id=">{{.Fc}} - {{.Sc}}</a></td>
+  <td>{{.Total}}</td>
 </tr>
 {{end}}
 
@@ -52,14 +52,14 @@
   <thead class="thead-inverse">
     <tr>
       <th colspan="3">
-        <a href="#collapseExample">
-          hren
+        <a href="sorevnovanie?id=4">
+          {{.Name}}
         </a>
       </th>
     </tr>
   </thead>
   <tbody>
-    {{range .Field_hockey}}
+    {{range .Match}}
       {{template "match" .}}
     {{end}}
   </tbody>

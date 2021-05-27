@@ -16,3 +16,10 @@ var swiper = new Swiper(".mySwiper", {
       prevEl: ".swiper-button-prev",
     },
   });
+
+  var app = new Vue({
+    el: '#all',
+    data: {
+      visible: false,
+    },
+  });

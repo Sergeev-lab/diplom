@@ -34,24 +34,9 @@
       </ul>
   </div>
   <div class="content">
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th colspan="3">
-            <a href="#collapseExample">
-              КХЛ
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"></td>
-          <td><a href="#">АкБарс - Авангард</a></td>
-          <td>3 - 2</td>
-        </tr>
-      </tbody>
-    </table>
+    {{range .Hockey}}
+      {{template "sorevnovanie" .}}
+    {{end}}
   </div>
 </div>
 {{end}}
@@ -73,24 +58,9 @@
       </ul>
   </div>
   <div class="content">
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th colspan="3">
-            <a href="#collapseExample">
-              Лига ВТБ
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"></td>
-          <td><a href="#">Екатеринбург - Пенза</a></td>
-          <td>1 - 0</td>
-        </tr>
-      </tbody>
-    </table>
+    {{range .Volleyball}}
+      {{template "sorevnovanie" .}}
+    {{end}}
   </div>
 </div>
 {{end}}
@@ -112,24 +82,9 @@
       </ul>
   </div>
   <div class="content">
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th colspan="3">
-            <a href="#collapseExample">
-              Мастерс
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><img src="/img/sport-icons/ping-pong.svg" alt="Хоккей"></td>
-          <td><a href="#">Андрей Дергунов - Денис Медведев</a></td>
-          <td>1 - 0</td>
-        </tr>
-      </tbody>
-    </table>
+    {{range .Table_tennis}}
+      {{template "sorevnovanie" .}}
+    {{end}}
   </div>
 </div>
 {{end}}
@@ -140,18 +95,20 @@
     <h2 class="heading-component-title">Хоккей на траве</h2>
       <ul class="list-inline">
         <li class="list-inline-item">
-          <a class="btn btn-sm btn-outline-danger active" href="">Live</a>
+          <a class="btn btn-sm btn-outline-danger active" href="#field_hockey">Live</a>
         </li>
         <li class="list-inline-item">
-          <a class="btn btn-sm btn-outline-danger" href="calendar">Календарь</a>
+          <a class="btn btn-sm btn-outline-danger" href="field_hockey/calendar">Календарь</a>
         </li>
         <li class="list-inline-item">
-          <a class="btn btn-sm btn-outline-danger" href="history">История</a>
+          <a class="btn btn-sm btn-outline-danger" href="field_hockey/history">История</a>
         </li>
       </ul>
   </div>
   <div class="content">
-    {{template "sorevnovanie" .}}
+    {{range .Field_hockey}}
+      {{template "sorevnovanie" .}}
+    {{end}}
   </div>
 </div>
 {{end}}
@@ -173,24 +130,9 @@
       </ul>
   </div>
   <div class="content">
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th colspan="3">
-            <a href="#collapseExample">
-              NBL
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><img src="/img/sport-icons/basketball-ball.svg" alt="Хоккей"></td>
-          <td><a href="#">Уникс - ЦСКА</a></td>
-          <td>50 - 42</td>
-        </tr>
-      </tbody>
-    </table>
+    {{range .Basketball}}
+      {{template "sorevnovanie" .}}
+    {{end}}
   </div>
 </div>
 {{end}}
@@ -212,25 +154,9 @@
       </ul>
   </div>
   <div class="content">
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th colspan="3">
-            <span><img src="/img/uefa.png" width="50px" height="50px" alt="УЕФА"></span>
-            <a href="#collapseExample">
-              УЕФА
-            </a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><img src="/img/sport-icons/football.svg" alt="Хоккей"></td>
-          <td><a href="#">Манчестер Сити - Челси</a></td>
-          <td>1 - 0</td>
-        </tr>
-      </tbody>
-    </table>
+    {{range .Football}}
+      {{template "sorevnovanie" .}}
+    {{end}}
   </div>
 </div>
 {{end}}
