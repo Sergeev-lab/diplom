@@ -25,6 +25,12 @@ func main() {
 	// Главная страничка
 	http.HandleFunc("/", indexHandler)
 
+	// Страничка с матчами
+	http.HandleFunc("/match/", matchHandler)
+
+	// Страничка с командами
+	http.HandleFunc("/commands/", commandsHandler)
+
 	// Запуск сервера
 	fmt.Println("Server is listening...")
 	http.ListenAndServe(":8181", nil)

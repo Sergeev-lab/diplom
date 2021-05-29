@@ -18,8 +18,18 @@ var swiper = new Swiper(".mySwiper", {
   });
 
   var app = new Vue({
-    el: '#all',
+    el: '#menu',
     data: {
-      visible: false,
+      hockey: 3,
+      volleyball: 0,
+      table_tennis: 0,
+      field_hockey: 0,
+      basketball: 0,
+      football: 0,
+    },
+    methods: {
+      chek: function() {
+        
+      },
     },
   });

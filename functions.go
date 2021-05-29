@@ -45,3 +45,16 @@ func Sorev(id int) []sorev {
 	}
 	return sor
 }
+
+func Match(id string) formatch {
+	p := formatch {}
+	res, err := database.Query("SELECT fc.id, fc.name, fc.present, fc.logo, sc.id, sc.name, sc.present, sc.logo, sorev.id, sorev.name, total, city.name, stad.name FROM matches JOIN commands AS fc ON fc.id = matches.fcommand_id JOIN commands AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id JOIN address AS city ON city.id = sorev.city_id JOIN address AS stad ON stad.id = sorev.stadium_id WHERE matches.id = ?", id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for res.Next() {
+		res.Scan(&p.Fc_id, &p.Fc_name, &p.Fc_present, &p.Fc_logo, &p.Sc_id, &p.Sc_name, &p.Sc_present, &p.Sc_logo, &p.Sorev_id, &p.Sorev_name, &p.Total, &p.City, &p.Stad)
+	}	
+	return p
+}
+

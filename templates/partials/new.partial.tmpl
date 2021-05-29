@@ -1,3 +1,16 @@
+{{define "slider"}}
+<div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper-container mySwiper">
+  <div class="swiper-wrapper">
+    {{range .Slider}}
+      {{template "slide" .}}
+    {{end}}
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
+{{end}}
+
 {{define "slide"}}
 <div class="swiper-slide" style="background-image: url({{.Img}})">
   <div class="title" data-swiper-parallax="-300">{{.Title}}</div>
@@ -12,7 +25,7 @@
 {{end}}
 
 {{define "menu_item"}}
-<div class="menu-item">
+<div class="menu-item" id="menu">
   <ul class="nav nav-tabs nav-fill">
     <li class="nav-item">
       <a class="nav-link active" data-toggle="tab" href="#all"><span><img src="/img/sport-icons/soccer-cup.svg" alt="Все"><br></span>Все</a>
@@ -33,7 +46,7 @@
       <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол</a>
+      <a class="nav-link disabled" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол</a>
     </li>
   </ul>
 </div>
@@ -42,7 +55,7 @@
 {{define "match"}}
 <tr>
   <td><img src="/img/sport-icons/field-hockey.svg" alt=""></td>
-  <td><a href="mathc?id=">{{.Fc}} - {{.Sc}}</a></td>
+  <td><a href="/match?id={{.Id}}">{{.Fc}} - {{.Sc}}</a></td>
   <td>{{.Total}}</td>
 </tr>
 {{end}}
@@ -52,7 +65,7 @@
   <thead class="thead-inverse">
     <tr>
       <th colspan="3">
-        <a href="sorevnovanie?id=4">
+        <a href="sorevnovanie?id={{.Id}}">
           {{.Name}}
         </a>
       </th>
