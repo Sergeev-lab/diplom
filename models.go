@@ -14,6 +14,7 @@ type commands struct {
 	Id string
 	Name string
 	Logo string
+	Present string
 	Sport sports
 }
 

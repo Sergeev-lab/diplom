@@ -1,0 +1,91 @@
+{{template "index" .}}
+
+{{define "title"}}
+  {{.Fc_name}} vs {{.Sc_name}}
+{{end}}
+
+{{define "players"}}
+<tr>
+  <td>{{.Number}}</td>
+  <td>{{.Name}}</td>
+  <td>{{.Position}}</td>
+</tr>
+{{end}}
+
+{{define "main"}}
+<div class="container">
+  <div class="game-result">
+    <div class="game-info game-info-classic">
+      <p class="game-info-subtitle">{{.City}} / {{.Stad}} / {{.Data}}</p>
+      <a href="/sorevnovania?id={{.Sorev_id}}" class="game-info-title">{{.Sorev_name}}</a>
+      <div class="game-info-main">
+        <div class="game-info-team game-info-team-first">
+          <img src="{{.Fc_logo}}" alt="" width="100" height="100">
+          <div class="game-result-team-name">
+            <a href="/commands?id={{.Fc_id}}">{{.Fc_name}}</a>
+          </div>
+          <div class="game-result-team-country">{{.Fc_present}}</div>
+        </div>
+        <div class="game-info-middle">
+          <div class="game-result-score-wrap">
+            <div class="game-info-score">{{.Total}}</div>
+          </div>
+        </div>
+        <div class="game-info-team game-info-team-second">
+          <img src="{{.Sc_logo}}" alt="" width="100" height="100">
+          <div class="game-result-team-name">
+            <a href="/commands?id={{.Sc_id}}">{{.Sc_name}}</a>
+          </div>
+          <div class="game-result-team-country">{{.Sc_present}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gy-5">
+    <div class="col-6">
+      <div class="p-3 border bg-light">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><img src="{{.Fc_logo}}" alt="" width="50px" height="50px"></th>
+              <th style="font-size: 15px;" colspan="2">{{.Fc_name}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Номер</td>
+              <td>Имя</td>
+              <td>Позиция</td>
+            </tr>
+            {{range .Fc_players}}
+              {{template "players" .}}
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-3 border bg-light">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><img src="{{.Sc_logo}}" alt="" width="50px" height="50px"></th>
+              <th style="font-size: 15px;" colspan="2">{{.Sc_name}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Номер</td>
+              <td>Имя</td>
+              <td>Позиция</td>
+            </tr>
+            {{range .Sc_players}}
+              {{template "players" .}}
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}

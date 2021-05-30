@@ -31,6 +31,9 @@ func main() {
 	// Страничка с командами
 	http.HandleFunc("/commands/", commandsHandler)
 
+	// Страничка с соревнованиями
+	http.HandleFunc("/sorevnovanie/", sorevnovanieHandler)
+
 	// Запуск сервера
 	fmt.Println("Server is listening...")
 	http.ListenAndServe(":8181", nil)

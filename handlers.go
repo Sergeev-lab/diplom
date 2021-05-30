@@ -3,25 +3,34 @@ package main
 import (
 	"net/http"
 	"html/template"
-	// "fmt"
+	"fmt"
 	// "encoding/json"
 	// "time"
 )
+
+type player struct {
+	Number string
+	Name string
+	Position string
+}
 
 type formatch struct {
 	Fc_id string
 	Fc_name string
 	Fc_present string
 	Fc_logo string
+	Fc_players []player
 	Sc_id string
 	Sc_name string
 	Sc_present string
 	Sc_logo string
+	Sc_players []player
 	Sorev_id string
 	Sorev_name string
 	Total string
 	City string
 	Stad string
+	Data string
 }
 
 type sorev struct {
@@ -38,6 +47,7 @@ type math struct {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("")
 	type data struct {
 		Slider []slider
 		Hockey []sorev
@@ -71,71 +81,42 @@ func matchHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	send := Match(id)
 
-	tmpl, _ := template.ParseFiles("templates/match.html")
+	files := []string {
+		"templates/pages/match.page.tmpl",
+		"templates/layouts/index.layout.tmpl",
+	}
+	tmpl, _ := template.ParseFiles(files...)
 	tmpl.Execute(w, send)
 }
 
 func commandsHandler(w http.ResponseWriter, r *http.Request) {
-	type info struct {
-		City string
-		Name string
-		Logo string
-		Sport string
+	id := r.URL.Query().Get("id")
+
+	send := Commands(id)
+	files := []string {
+		"templates/pages/commands.page.tmpl",
+		"templates/layouts/index.layout.tmpl",
+	}
+	tmpl, _ := template.ParseFiles(files...)
+	tmpl.Execute(w, send)
+}
+
+func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
+	type table struct {
+		Sorev string
+		Table []tablepoints
 	}
 
-	type result struct {
-		Match_id string
-		Fc_id string
-		Fc_name string
-		Fc_present string
-		Fc_logo string
-		Sc_id string
-		Sc_name string
-		Sc_present string
-		Sc_logo string
-		Stad string
-		Total string
-		Data string
+	id := r.URL.Query().Get("id")
+	send := table {
+		Table: Sorevnivania(id),
+		Sorev: getSorevName(id),
 	}
-
-	type kalendar struct {
-
+	fmt.Println(send)
+	files := []string {
+		"templates/pages/sorevnovanie.page.tmpl",
+		"templates/layouts/index.layout.tmpl",
 	}
-
-	type data struct {
-		Info info
-		Results result 
-		Kalendar kalendar
-	}
-
-	// id := r.URL.Query().Get("id")
-
-	send := data {
-		Info: info {
-			City: "казань" ,
-			Name: "динамо-акбарс",
-			Logo: "/img/commands/dynamo-kzn.png",
-			Sport: "Хоккей на траве",
-		},
-		Results: result {
-			Match_id: "4",
-			Fc_id: "3",
-			Fc_name: "динамо-акбарс",
-			Fc_logo: "/img/commands/dynamo-kzn.png",
-			Fc_present: "Казань",
-			Sc_id: "2",
-			Sc_name: "динамо-электросталь",
-			Sc_logo: "/img/commands/elstal.jpg",
-			Sc_present: "мос область",
-			Stad: "центр хоккея на траве",
-			Total: "2:1",
-			Data: "14 апреля 2021",
-		},
-		Kalendar: kalendar {
-
-		},
-	}
-
-	tmpl, _ := template.ParseFiles("templates/commands.html")
+	tmpl, _ := template.ParseFiles(files...)
 	tmpl.Execute(w, send)
 }

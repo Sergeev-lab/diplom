@@ -1,15 +1,3 @@
-{{define "slider"}}
-<div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper-container mySwiper">
-  <div class="swiper-wrapper">
-    {{range .Slider}}
-      {{template "slide" .}}
-    {{end}}
-  </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
-{{end}}
 
 {{define "slide"}}
 <div class="swiper-slide" style="background-image: url({{.Img}})">

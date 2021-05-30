@@ -1,0 +1,44 @@
+{{template "index" .}}
+
+{{define "title"}}
+Hello World!
+{{end}}
+
+{{define "main"}}
+<div class="container">
+  <div style="margin-top: 25px;" class="row gy-5">
+    <div class="col">
+      <div class="p-3 border bg-light">
+        <h5 style="text-align: center; margin-bottom: 20px;">{{.Sorev}}</h5>
+        <table style="text-align: center;" class="table">
+            <thead>
+              <tr>
+                <th>Позиция</th>
+                <th>Команда</th>
+                <th>Очки</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range .Table}}
+              <tr>
+                  <td>{{.Position}}</td>
+                  <td class="team-inline">
+                  <div class="team-figure"><img src="{{.Logo}}" alt="" width="45" height="45">
+                  </div>
+                  <div style="text-align: center;" class="team-title">
+                      <div class="team-name">
+                        <a href="/commands?id={{.Id}}">{{.Name}}</a>
+                      </div>
+                      <div class="team-country">{{.Present}}</div>
+                  </div>
+                  </td>
+                  <td>{{.Points}}</td>
+              </tr>
+              {{end}}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}

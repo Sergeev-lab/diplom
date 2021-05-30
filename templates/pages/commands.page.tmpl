@@ -1,0 +1,85 @@
+{{template "index" .}}
+
+{{define "title"}}
+{{.Info.Name}}
+{{end}}
+
+{{define "main"}}
+<div class="container">
+  <div class="game-result">
+    <div class="game-info game-info-classic">
+      <p class="game-info-subtitle">{{.Info.Present}}</p>
+      <h3 class="game-info-title">{{.Info.Name}}</h3>
+      <div class="command-info-main">
+        <div class="command-info-team">
+          <img src="{{.Info.Logo}}" alt="" width="200" height="200">
+          <div class="game-result-team-country">{{.Info.Sport.Name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gy-5">
+    <div class="col-6">
+      <div class="p-3 border bg-light">
+        <h3 style="margin-bottom: 20px;">Результаты</h3>
+        {{range .Results}}
+        <div class="game-results game-result-classic" onclick="location.href='/match?id={{.Match_id}}';">
+          <div class="game-result-main">
+            <div class="game-result-team game-result-team-first">
+              <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Fc_logo}}" alt="" width="70" height="70">
+              </figure>
+              <div class="game-result-team-name">{{.Fc_name}}</div>
+              <div class="game-result-team-country">{{.Fc_present}}</div>
+            </div>
+            <div class="game-result-middle">
+              <h3>{{.Total}}</h3>
+            </div>
+            <div class="game-result-team game-result-team-second">
+              <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Sc_logo}}" alt="" width="70" height="70">
+              </figure>
+              <div class="game-result-team-name">{{.Sc_name}}</div>
+              <div class="game-result-team-country">{{.Sc_present}}</div>
+            </div>
+          </div>
+          <div class="game-result-footer">
+            <ul class="game-result-details">
+              <li><a href="/sorevnovania?id={{.Sorev_id}}">{{.Sorev_name}}</a></li>
+              <li>{{.Data}}</li>
+            </ul>
+          </div>
+        </div>
+        {{end}}
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-3 border bg-light">
+        <h3 style="margin-bottom: 20px;">Календарь</h3>
+        {{range .Kalendar}}
+        <div class="game-results game-result-classic" onclick="location.href='/match?id={{.Match_id}}';">
+          <div class="game-result-main">
+            <div class="game-result-team game-result-team-first">
+              <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Fc_logo}}" alt="" width="70" height="70">
+              </figure>
+              <div class="game-result-team-name">{{.Fc_name}}</div>
+              <div class="game-result-team-country">{{.Fc_present}}</div>
+            </div>
+            <div class="game-result-team game-result-team-second">
+              <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Sc_logo}}" alt="" width="70" height="70">
+              </figure>
+              <div class="game-result-team-name">{{.Sc_name}}</div>
+              <div class="game-result-team-country">{{.Sc_present}}</div>
+            </div>
+          </div>
+          <div class="game-result-footer">
+            <ul class="game-result-details">
+              <li><a href="/sorevnovania?id={{.Sorev_id}}">{{.Sorev_name}}</a></li>
+              <li>{{.Data}}</li>
+            </ul>
+          </div>
+        </div>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}

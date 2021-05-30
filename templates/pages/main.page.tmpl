@@ -4,43 +4,17 @@
 Главная
 {{end}}
 
-{{define "main"}}
-{{template "menu_item" .}}
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="all">
-        
-          {{template "hockey" .}}
-        
-          {{template "volleyball" .}}
-       
-          {{template "table_tennis" .}}
-        
-          {{template "field_hockey" .}}
-        
-          {{template "basketball" .}}
-        
-          {{template "football" .}}
-        
-      </div>
-      <div class="tab-pane fade" id="hockey">
-        {{template "hockey" .}}
-      </div>
-      <div class="tab-pane fade" id="volleyball">
-        {{template "volleyball" .}}
-      </div>
-      <div class="tab-pane fade" id="table_tennis">
-        {{template "table_tennis" .}}
-      </div>
-      <div class="tab-pane fade" id="field_hockey">
-        {{template "field_hockey" .}}
-      </div>
-      <div class="tab-pane fade" id="basketball">
-        {{template "basketball" .}}
-      </div>
-      <div class="tab-pane fade" id="football">
-        {{template "football"}}
-      </div>
-    </div>
+{{define "slider"}}
+<div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper-container mySwiper">
+  <div class="swiper-wrapper">
+    {{range .Slider}}
+      {{template "slide" .}}
+    {{end}}
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
 {{end}}
 
 {{define "hockey"}}
@@ -183,6 +157,41 @@
     {{range .Football}}
       {{template "sorevnovanie" .}}
     {{end}}
+  </div>
+</div>
+{{end}}
+
+{{define "main"}}
+{{template "slider" .}}
+<div class="container">
+{{template "menu_item" .}}
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="all">
+        {{template "hockey" .}}
+        {{template "volleyball" .}}
+        {{template "table_tennis" .}}
+        {{template "field_hockey" .}}
+        {{template "basketball" .}}
+        {{template "football" .}}
+    </div>
+    <div class="tab-pane fade" id="hockey">
+      {{template "hockey" .}}
+    </div>
+    <div class="tab-pane fade" id="volleyball">
+      {{template "volleyball" .}}
+    </div>
+    <div class="tab-pane fade" id="table_tennis">
+      {{template "table_tennis" .}}
+    </div>
+    <div class="tab-pane fade" id="field_hockey">
+      {{template "field_hockey" .}}
+    </div>
+    <div class="tab-pane fade" id="basketball">
+      {{template "basketball" .}}
+    </div>
+    <div class="tab-pane fade" id="football">
+      {{template "football" .}}
+    </div>
   </div>
 </div>
 {{end}}
