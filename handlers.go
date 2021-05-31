@@ -4,9 +4,12 @@ import (
 	"net/http"
 	"html/template"
 	"fmt"
+	
 	// "encoding/json"
 	// "time"
 )
+
+var mySigningKey = []byte("secret") 
 
 type player struct {
 	Number string
@@ -112,11 +115,38 @@ func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
 		Table: Sorevnivania(id),
 		Sorev: getSorevName(id),
 	}
-	fmt.Println(send)
+
 	files := []string {
 		"templates/pages/sorevnovanie.page.tmpl",
 		"templates/layouts/index.layout.tmpl",
 	}
 	tmpl, _ := template.ParseFiles(files...)
 	tmpl.Execute(w, send)
+}
+
+func registerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		user := r.FormValue("username")
+		password := r.FormValue("password")
+		err := register(user, password)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	
+	tmpl, _ := template.ParseFiles("templates/register.html")
+	tmpl.Execute(w, nil)
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	// token := getToken(mySigningKey)
+	// parseToken(token, mySigningKey)
+
+	err := login(r.FormValue("username"), r.FormValue("password"))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	tmpl, _ := template.ParseFiles("templates/login.html")
+	tmpl.Execute(w, nil)
 }

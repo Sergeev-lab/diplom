@@ -18,6 +18,14 @@ type commands struct {
 	Sport sports
 }
 
+type user struct {
+	Id string
+	Login string
+	Password string
+	Type_id string
+	Token string
+}
+
 type commands_and_person struct {
 	Id string
 	Commands commands

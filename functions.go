@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"time"
+	"errors"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 type result struct {
@@ -190,4 +192,63 @@ func getSorevName(id string) string {
 	res1.Scan(&name)
 
 	return name
+}
+
+func getToken(mySigningKey []byte) string {
+	token := jwt.New(jwt.SigningMethodHS256)
+	tokenString, _ := token.SignedString(mySigningKey)
+
+	return tokenString
+}
+
+func parseToken(tokenString string, mySigningKey []byte) bool {
+	token, err :=jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(mySigningKey), nil
+	})
+
+	if err == nil && token.Valid {
+        // fmt.Println("Your token is valid.  I like your style.")
+		return true
+    } else {
+        // fmt.Println("This token is terrible!  I cannot accept this.")
+		return false
+    }
+}
+
+func register(u, p string) error {
+	name := user {}
+	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", u)
+	res.Scan(&name.Id, &name.Login, &name.Password, &name.Type_id, &name.Token)
+
+	if len(name.Id) > 0 {
+		return errors.New("Такой пользователь уже существует")
+	} else {
+		token := getToken(mySigningKey)
+		_, err := database.Exec("INSERT INTO `users` (`id`, `login`, `password`, `type_id`, `token`) VALUES (NULL, ?, ?, '9', ?)", u, p, token)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func login(l, p string) error {
+	name := user {}
+	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", l)
+	res.Scan(&name.Id, &name.Login, &name.Password, &name.Type_id, &name.Token)
+
+	if len(name.Id) == 0 {
+		return errors.New("Пользователь не найден")
+	}
+	if name.Password != p {
+		return errors.New("Неверный пароль")
+	}
+	if parseToken(name.Token, mySigningKey) == true {
+		fmt.Println("Токен валидный!")
+	} else {
+		return errors.New("Токен не валидный")
+	}
+
+	return nil
 }
