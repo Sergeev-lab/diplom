@@ -19,23 +19,47 @@
       <a class="nav-link active" data-toggle="tab" href="#all"><span><img src="/img/sport-icons/soccer-cup.svg" alt="Все"><br></span>Все</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#hockey"><span><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"><br></span>Хоккей</a>
+      {{if .Hockey}}
+        <a class="nav-link" data-toggle="tab" href="#hockey"><span><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"><br></span>Хоккей</a>
+      {{else}}
+      <a class="nav-link disabled" data-toggle="tab" href="#hockey"><span><img src="/img/sport-icons/ice_hockey.svg" alt="Хоккей"><br></span>Хоккей</a>
+      {{end}}
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#volleyball"><span><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"><br></span>Волейбол</a>
+      {{if .Volleyball}}
+        <a class="nav-link" data-toggle="tab" href="#volleyball"><span><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"><br></span>Волейбол</a>
+      {{else}}
+        <a class="nav-link disabled" data-toggle="tab" href="#volleyball"><span><img src="/img/sport-icons/volleyball-ball.svg" alt="Волейбол"><br></span>Волейбол</a>
+      {{end}}
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#table_tennis"><span><img src="/img/sport-icons/ping-pong.svg" alt="Настольный теннис"><br></span>Настольный теннис</a>
+      {{if .Table_tennis}}
+        <a class="nav-link" data-toggle="tab" href="#table_tennis"><span><img src="/img/sport-icons/ping-pong.svg" alt="Настольный теннис"><br></span>Настольный теннис</a>
+      {{else}}
+        <a class="nav-link disabled" data-toggle="tab" href="#table_tennis"><span><img src="/img/sport-icons/ping-pong.svg" alt="Настольный теннис"><br></span>Настольный теннис</a>
+      {{end}}
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#field_hockey"><span><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"><br></span>Хоккей на траве</a>
+      {{if .Field_hockey}}
+        <a class="nav-link" data-toggle="tab" href="#field_hockey"><span><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"><br></span>Хоккей на траве</a>
+      {{else}}
+        <a class="nav-link disabled" data-toggle="tab" href="#field_hockey"><span><img src="/img/sport-icons/field-hockey.svg" alt="Хоккей на траве"><br></span>Хоккей на траве</a>
+      {{end}}
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол</a>
-    </li>
+      {{if .Basketball}}
+        <a class="nav-link" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол</a>
+      {{else}}
+        <a class="nav-link disabled" data-toggle="tab" href="#basketball"><span><img src="/img/sport-icons/basketball-ball.svg" alt="Баскетбол"><br></span>Баскетбол</a>
+      {{end}}
+      </li>
     <li class="nav-item">
-      <a class="nav-link disabled" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол</a>
-    </li>
+      {{if .Football}}
+        <a class="nav-link" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол</a>
+      {{else}}
+        <a class="nav-link disabled" data-toggle="tab" href="#football"><span><img src="/img/sport-icons/football.svg" alt="Футбол"><br></span>Футбол</a>
+      {{end}}
+      </li>
   </ul>
 </div>
 {{end}}

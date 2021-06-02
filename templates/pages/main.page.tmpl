@@ -167,12 +167,35 @@
 {{template "menu_item" .}}
   <div class="tab-content">
     <div class="tab-pane fade show active" id="all">
+      {{if .Hockey}}
         {{template "hockey" .}}
+        {{else}}
+      {{end}}
+
+      {{if .Volleyball}}
         {{template "volleyball" .}}
+        {{else}}
+      {{end}}
+
+      {{if .Table_tennis}}
         {{template "table_tennis" .}}
+        {{else}}
+      {{end}}
+
+      {{if .Field_hockey}}
         {{template "field_hockey" .}}
+        {{else}}
+      {{end}}
+
+      {{if .Basketball}}
         {{template "basketball" .}}
+        {{else}}
+      {{end}}
+
+      {{if .Football}}
         {{template "football" .}}
+        {{else}}
+      {{end}}
     </div>
     <div class="tab-pane fade" id="hockey">
       {{template "hockey" .}}

@@ -23,16 +23,16 @@ func main() {
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 	
 	// Главная страничка
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/", middleware(indexHandler))
 
 	// Страничка с матчами
-	http.HandleFunc("/match/", matchHandler)
+	http.HandleFunc("/match/", middleware(matchHandler))
 
 	// Страничка с командами
-	http.HandleFunc("/commands/", commandsHandler)
+	http.HandleFunc("/commands/", middleware(commandsHandler))
 
 	// Страничка с соревнованиями
-	http.HandleFunc("/sorevnovanie/", sorevnovanieHandler)
+	http.HandleFunc("/sorevnovanie/", middleware(sorevnovanieHandler))
 
 	// Страничка с регистрацией
 	http.HandleFunc("/register/", registerHandler)

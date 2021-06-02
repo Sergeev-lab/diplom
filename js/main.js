@@ -16,20 +16,3 @@ var swiper = new Swiper(".mySwiper", {
       prevEl: ".swiper-button-prev",
     },
   });
-
-  var app = new Vue({
-    el: '#menu',
-    data: {
-      hockey: 3,
-      volleyball: 0,
-      table_tennis: 0,
-      field_hockey: 0,
-      basketball: 0,
-      football: 0,
-    },
-    methods: {
-      chek: function() {
-        
-      },
-    },
-  });

@@ -239,15 +239,18 @@ func login(l, p string) error {
 	res.Scan(&name.Id, &name.Login, &name.Password, &name.Type_id, &name.Token)
 
 	if len(name.Id) == 0 {
-		return errors.New("Пользователь не найден")
+		return errors.New("* Пользователь не найден")
 	}
 	if name.Password != p {
-		return errors.New("Неверный пароль")
+		return errors.New("* Неверный пароль")
 	}
-	if parseToken(name.Token, mySigningKey) == true {
-		fmt.Println("Токен валидный!")
-	} else {
-		return errors.New("Токен не валидный")
+	if parseToken(name.Token, mySigningKey) == false {
+		_, err := database.Exec("UPDATE `users` SET `token` = ? WHERE `users`.`id` = ?", getToken(mySigningKey), name.Id)
+		if err != nil {
+			return err
+		}
+
+		login(l, p)
 	}
 
 	return nil

@@ -143,10 +143,18 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// parseToken(token, mySigningKey)
 
 	err := login(r.FormValue("username"), r.FormValue("password"))
-	if err != nil {
-		fmt.Println(err)
+	if err == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 
 	tmpl, _ := template.ParseFiles("templates/login.html")
-	tmpl.Execute(w, nil)
+	tmpl.Execute(w, err)
+}
+
+func middleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("hello from middleware!")
+		
+		next(w, r)
+	}
 }
