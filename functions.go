@@ -5,6 +5,11 @@ import (
 	"time"
 	"errors"
 	jwt "github.com/dgrijalva/jwt-go"
+	"net/url"
+	"mime/multipart"
+	"io/ioutil"
+	"strings"
+	"net/http"
 )
 
 type result struct {
@@ -194,8 +199,14 @@ func getSorevName(id string) string {
 	return name
 }
 
-func getToken(mySigningKey []byte) string {
+func getToken(mySigningKey []byte, id int64) string {
 	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := make(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	claims["User_id"] = id
+	token.Claims = claims
+
 	tokenString, _ := token.SignedString(mySigningKey)
 
 	return tokenString
@@ -215,43 +226,96 @@ func parseToken(tokenString string, mySigningKey []byte) bool {
     }
 }
 
-func register(u, p string) error {
+func checkUser(u, p string) (string, error) {
 	name := user {}
 	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", u)
 	res.Scan(&name.Id, &name.Login, &name.Password, &name.Type_id, &name.Token)
 
 	if len(name.Id) > 0 {
-		return errors.New("Такой пользователь уже существует")
+		return "", errors.New("Такой пользователь уже существует")
 	} else {
-		token := getToken(mySigningKey)
-		_, err := database.Exec("INSERT INTO `users` (`id`, `login`, `password`, `type_id`, `token`) VALUES (NULL, ?, ?, '9', ?)", u, p, token)
+		res, err := database.Exec("INSERT INTO `users` (`id`, `login`, `password`, `type_id`) VALUES (NULL, ?, ?, '9')", u, p)
 		if err != nil {
-			return err
+			return "", err
 		}
+		id, _ := res.LastInsertId()
+		
+		token := getToken(mySigningKey, id)
+
+		return token, nil
+	}
+}
+
+func register(w http.ResponseWriter, r *http.Request) (error) {
+	r.ParseMultipartForm(32 << 20)
+
+	token, err := checkUser(r.Form.Get("login"), r.Form.Get("password"))
+	if err != nil {
+		return err
 	}
 
+	pic, _, err := r.FormFile("Logo")
+	if err != nil {
+		return err
+	}
+
+	file, err := download(pic, "img/commands/")
+	if err != nil {
+		return err
+	}
+
+	er := newCommand(r.Form, file)
+	if er != nil {
+		return err
+	}
+
+	cookie := http.Cookie{Name: "token", Path: "/", Value: token}
+	http.SetCookie(w, &cookie)
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	
 	return nil
 }
 
-func login(l, p string) error {
-	name := user {}
-	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", l)
-	res.Scan(&name.Id, &name.Login, &name.Password, &name.Type_id, &name.Token)
-
-	if len(name.Id) == 0 {
-		return errors.New("* Пользователь не найден")
-	}
-	if name.Password != p {
-		return errors.New("* Неверный пароль")
-	}
-	if parseToken(name.Token, mySigningKey) == false {
-		_, err := database.Exec("UPDATE `users` SET `token` = ? WHERE `users`.`id` = ?", getToken(mySigningKey), name.Id)
-		if err != nil {
-			return err
-		}
-
-		login(l, p)
+func cookieToken(w http.ResponseWriter, r *http.Request) (string, error) {
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return "", err
 	}
 
+	return cookie.Value, nil
+}
+
+func download(pic multipart.File, path string) (string, error) {
+	fileBytes, err := ioutil.ReadAll(pic)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
+	tempFile, err := ioutil.TempFile(path, "upload-*.png")
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
+	tempFile.Write(fileBytes)
+
+	file := tempFile.Name()
+	Fname := strings.ReplaceAll(file, "\\", "/")
+
+	return Fname, nil
+}
+
+func newCommand(f url.Values, logo string) error {
+	_, err := database.Exec("INSERT INTO `commands` (`id`, `name`, `logo`, `present`, `sports_id`) VALUES (NULL, ?, ?, ?, ?)", f.Get("name"), logo, f.Get("city"), f.Get("sport"))
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func calendar(s string) {
+	
 }

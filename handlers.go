@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"fmt"
 	
+	// "bytes"
+    // "encoding/json"
 	// "encoding/json"
 	// "time"
 )
@@ -50,7 +52,6 @@ type math struct {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("")
 	type data struct {
 		Slider []slider
 		Hockey []sorev
@@ -75,6 +76,19 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		"templates/pages/main.page.tmpl",
 		"templates/layouts/index.layout.tmpl",
 		"templates/partials/new.partial.tmpl",
+	}
+	tmpl, _ := template.ParseFiles(files...)
+	tmpl.Execute(w, send)
+}
+
+func calendarHandler(w http.ResponseWriter, r *http.Request) {
+	sport := r.URL.Query().Get("sport")
+
+	// send := calendar(sport)
+
+	files := []string {
+		"templates/pages/calendar.page.tmpl",
+		"templates/layouts/index.layout.tmpl",
 	}
 	tmpl, _ := template.ParseFiles(files...)
 	tmpl.Execute(w, send)
@@ -125,36 +139,34 @@ func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		user := r.FormValue("username")
-		password := r.FormValue("password")
-		err := register(user, password)
+	var send error
+	
+	if r.Method == http.MethodPost {
+		err := register(w, r)
 		if err != nil {
-			fmt.Println(err)
+			send = err
 		}
 	}
-	
+
 	tmpl, _ := template.ParseFiles("templates/register.html")
-	tmpl.Execute(w, nil)
+	tmpl.Execute(w, send)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	// token := getToken(mySigningKey)
-	// parseToken(token, mySigningKey)
-
-	err := login(r.FormValue("username"), r.FormValue("password"))
-	if err == nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-	}
 
 	tmpl, _ := template.ParseFiles("templates/login.html")
-	tmpl.Execute(w, err)
+	tmpl.Execute(w, nil)
 }
 
 func middleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("hello from middleware!")
-		
+		fmt.Println("Hello from middleware")
+		cookie, err := r.Cookie("token")
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			w.Header().Set("Authorization", cookie.Value)
+		}
 		next(w, r)
 	}
 }

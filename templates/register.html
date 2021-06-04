@@ -6,52 +6,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
     <link rel="icon" href="/img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/swiper-bundle.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
-    <form id="form" @submit="checkForm" action="/register/" method="POST" class="form-signin">
-        <img class="mb-4" src="/img/logo-default-213x82.png" alt="" width="150" height="150">
-        <h1 class="h4 mb-4 font-weight-normal">Регистрация</h1>
-        <p v-show="visible" style="color: red;">${message}$</p>
-        <p style="color: red;">{{.Message}}</p>
-        <label for="inputLogin" class="sr-only">Логин</label>
-        <input type="text" id="inputLogin" name="username" class="form-control" placeholder="Логин" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Пароль</label>
-        <input v-model="fpass" name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="">
-        <label for="inputPassword" class="sr-only">Повтор пароля</label>
-        <input v-model="spass" type="password" id="inputPassword" class="form-control" placeholder="Повтор пароля" required="">
-        <button style="margin-top: 30px;" class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
-    </form>
+  <form id="form" @submit="checkForm" action="/register/" method="POST" class="form-signin" enctype="multipart/form-data">
+    <img class="mb-4" src="/img/logo-default-213x82.png" alt="" width="150" height="150">
+    <h1 class="h4 mb-4 font-weight-normal">Регистрация</h1>
+    <p v-show="visible" style="color: red;">${message}$</p>
+    <p style="color: red;">{{.}}</p>
+    <div class="form-check form-check-inline">
+      <input checked v-model="radio" class="form-check-input" type="radio" name="inlineRadioOptions" value="command">
+      <label class="form-check-label">Команда</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input v-model="radio" class="form-check-input" type="radio" name="inlineRadioOptions" value="sportsman">
+      <label class="form-check-label">Спортсмен</label>
+    </div>
+    <div v-if="radio=='sportsman'">
+      <input type="text" class="form-control" name="name" placeholder="ФИО">
+      <input class="form-control" required type="text" name="city" placeholder="Город который предоставляете">
+      <select v-model="select" name="sport" class="form-control form-control-lg">
+        <option value="0">Вид спорта</option>
+        <option value="3">Настольный теннис</option>
+      </select>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" name="Logo" id="customFile" lang="ru" accept="image/jpeg,image/png">
+        <label style="text-align: left;" class="custom-file-label" for="customFile">Загрузите логотип</label>
+      </div>
+      <input type="text" class="form-control" name="login" placeholder="Придумайте логин">
+      <label for="inputPassword" class="sr-only">Пароль</label>
+      <input v-model="fpass" name="password" type="password" id="inputPassword1" class="form-control" placeholder="Пароль" required="">
+      <label for="inputPassword" class="sr-only">Повтор пароля</label>
+      <input v-model="spass" type="password" id="inputPassword2" class="form-control" placeholder="Повтор пароля" required="">
+      <button style="margin-top: 30px;" class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+    </div>
+    <div v-if="radio=='command'">
+      <input class="form-control" required type="text" name="name" placeholder="Название команды">
+      <input class="form-control" required type="text" name="city" placeholder="Город который предоставляете">
+      <select v-model="select" name="sport" class="form-control form-control-lg">
+        <option value="0">Вид спорта</option>
+        <option value="1">Хоккей</option>
+        <option value="2">Волейбол</option>
+        <option value="4">Хоккей на траве</option>
+        <option value="5">Баскетбол</option>
+        <option value="6">Футбол</option>
+      </select>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" name="Logo" id="customFile" lang="ru" accept="image/jpeg,image/png">
+        <label style="text-align: left;" class="custom-file-label" for="customFile">Загрузите логотип</label>
+      </div>
+    <input type="text" class="form-control" name="login" placeholder="Придумайте логин">
+    <label for="inputPassword" class="sr-only">Пароль</label>
+    <input v-model="fpass" name="password" type="password" id="inputPassword1" class="form-control" placeholder="Пароль" required="">
+    <label for="inputPassword" class="sr-only">Повтор пароля</label>
+    <input v-model="spass" type="password" id="inputPassword2" class="form-control" placeholder="Повтор пароля" required="">
+    <button style="margin-top: 30px;" class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+    </div>
+  </form>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="/js/main.js" type="text/javascript"></script>
+    <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="/js/vue.js"></script>
+  <script src="/js/swiper-bundle.js"></script>
+  <script src="/js/main.js" type="text/javascript"></script>
 
-    <script>
-        var app = new Vue({
-            delimiters: ['${', '}$'],
-            el: '#form',
-            data: {
-                visible: false,
-                message: '* Пароли не совпадают',
-                fpass: '',
-                spass: '',
-            },
-            methods: {
-                checkForm: function (e) {
-                    if (this.fpass != this.spass) {
-                        this.visible = true;
-                        e.preventDefault();
-                    } else {
-                        return true;
-                    }
-                },
-            },
-        })
-    </script>
+  <script>
+    var app = new Vue({
+      delimiters: ['${', '}$'],
+      el: '#form',
+      data: {
+        visible: false,
+        message: '',
+        fpass: '',
+        spass: '',
+        radio: '',
+        select: '0',
+      },
+      methods: {
+        checkForm: function (e) {
+          if (this.select == '0') {
+            this.message = '* Выберите вид спорта';
+            this.visible = true;
+            e.preventDefault();
+          }
+          if (this.fpass != this.spass) {
+            this.message = '* Пароли не совпадают';
+            this.visible = true;
+            e.preventDefault();
+          } else {
+            return true;
+          }
+        },
+      },
+    });
+  </script>
 </body>
 </html>
