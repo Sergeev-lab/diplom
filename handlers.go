@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"fmt"
 	
+	
 	// "bytes"
     // "encoding/json"
 	// "encoding/json"
@@ -174,9 +175,25 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func userHandler(w http.ResponseWriter, r *http.Request) {
+	type sent struct {
+		Data user
+		Dost rezults_command
+	}
+
 	token := w.Header().Get("Authorization")
-	claims, _ := parseToken(token, mySigningKey)
-	fmt.Println(claims)
+	claims, err := parseToken(token, mySigningKey)
+	if !err {
+		fmt.Println("Ошибка токена")
+	}
+	id := fmt.Sprintf("%v", claims["User_id"])
+	
+	dataUser := getUser(id)
+
+	send := sent {
+		Data: dataUser,
+		Dost: getDost(dataUser.Command.Id),
+	}
+
 	if r.Method == http.MethodPost {
 		r.ParseMultipartForm(32 << 20)
 		fmt.Println(r.Form)
@@ -188,7 +205,18 @@ func userHandler(w http.ResponseWriter, r *http.Request) {
 		"templates/layouts/index.layout.tmpl",
 	}
 	tmpl, _ := template.ParseFiles(files...)
-	tmpl.Execute(w, nil)
+	tmpl.Execute(w, send)
+}
+
+func logOut(w http.ResponseWriter, r *http.Request) {
+	c := http.Cookie {
+		Name: "token",
+		Path: "/",
+		MaxAge: -1,
+	}
+	http.SetCookie(w, &c)
+	
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func middleware(next http.HandlerFunc) http.HandlerFunc {

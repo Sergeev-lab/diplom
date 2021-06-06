@@ -22,8 +22,7 @@ type user struct {
 	Id string
 	Login string
 	Password string
-	Type_id string
-	Token string
+	Command commands
 }
 
 type commands_and_person struct {
@@ -61,6 +60,13 @@ type slider struct {
 	Subtitle string
 	Description string
 	Btn string
+}
+
+type rezults_command struct {
+	Id string
+	Command commands
+	Sorev sorevnovanie
+	Plase string
 }
 
 type sorevnovanie struct {

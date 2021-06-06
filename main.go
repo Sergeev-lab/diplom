@@ -45,6 +45,8 @@ func main() {
 	http.HandleFunc("/login/", loginHandler)
 	// Страничка личного кабинета
 	http.HandleFunc("/user/", middleware(userHandler))
+	// Страничка личного кабинета
+	http.HandleFunc("/user/logout/", logOut)
 
 	// Запуск сервера
 	fmt.Println("Server is listening...")

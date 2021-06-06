@@ -71,10 +71,10 @@ func Sorev(id int) []sorev {
 	for res.Next() {
 		p := sorev {}
 		res.Scan(&p.Id, &p.Name)
-		rest, _ := database.Query("SELECT matches.id, Fc.name, Sc.name, matches.total FROM matches JOIN commands as Fc ON Fc.id = matches.fcommand_id JOIN commands as Sc ON Sc.id = matches.scommand_id WHERE matches.sorevnovania_id = ? AND matches.status = 'live'", p.Id)
+		rest, _ := database.Query("SELECT matches.id, Fc.name, Sc.name, matches.fscore, matches.sscore FROM matches JOIN commands_or_players as Fc ON Fc.id = matches.fcommand_id JOIN commands_or_players as Sc ON Sc.id = matches.scommand_id WHERE matches.sorevnovania_id = ? AND matches.status = 'live'", p.Id)
 		for rest.Next() {
 			a:= math {}
-			rest.Scan(&a.Id, &a.Fc, &a.Sc, &a.Total)
+			rest.Scan(&a.Id, &a.Fc, &a.Sc, &a.)
 			mat = append(mat, a)
 		}
 		p.Match = mat
@@ -89,7 +89,7 @@ func Match(id string) formatch {
 	name := []player {}
 
 	// Информация о матче
-	res, err := database.Query("SELECT fc.id, fc.name, fc.present, fc.logo, sc.id, sc.name, sc.present, sc.logo, sorev.id, sorev.name, total, city.name, stad.name, data FROM matches JOIN commands AS fc ON fc.id = matches.fcommand_id JOIN commands AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id JOIN address AS city ON city.id = sorev.city_id JOIN address AS stad ON stad.id = sorev.stadium_id WHERE matches.id = ?", id)
+	res, err := database.Query("SELECT fc.id, fc.name, fc.present, fc.logo, sc.id, sc.name, sc.present, sc.logo, sorev.id, sorev.name, total, city.name, stad.name, data FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id JOIN address AS city ON city.id = sorev.city_id JOIN address AS stad ON stad.id = sorev.stadium_id WHERE matches.id = ?", id)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -132,7 +132,7 @@ func Commands(id string) data {
 	name := data {}
 
 	// Информация о команде
-	res1, err := database.Query("SELECT commands.id, commands.name, commands.logo, commands.present, sports.name FROM `commands` JOIN sports ON sports.id = sports_id WHERE commands.id = ?", id)
+	res1, err := database.Query("SELECT commands_or_players.id, commands_or_players.name, commands_or_players.logo, commands_or_players.present, sports.name FROM `commands_or_players` JOIN sports ON sports.id = sports_id WHERE commands_or_players.id = ?", id)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -142,7 +142,7 @@ func Commands(id string) data {
 
 	// Результаты команды
 	a := []result {}
-	res2, err := database.Query("SELECT matches.id, fc.id, fc.name, fc.logo, fc.present, sc.id, sc.name, sc.logo, sc.present, matches.total, sorev.id, sorev.name, matches.data FROM matches JOIN commands AS fc ON fc.id = matches.fcommand_id JOIN commands AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.status = 'finish' AND (fc.id = ? OR sc.id = ?)", id, id)
+	res2, err := database.Query("SELECT matches.id, fc.id, fc.name, fc.logo, fc.present, sc.id, sc.name, sc.logo, sc.present, matches.total, sorev.id, sorev.name, matches.data FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.status = 'finish' AND (fc.id = ? OR sc.id = ?)", id, id)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -157,7 +157,7 @@ func Commands(id string) data {
 
 	// Календарь команды
 	aa := []result {}
-	res3, err := database.Query("SELECT matches.id, fc.id, fc.name, fc.logo, fc.present, sc.id, sc.name, sc.logo, sc.present, sorev.id, sorev.name, matches.data FROM matches JOIN commands AS fc ON fc.id = matches.fcommand_id JOIN commands AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.status = 'up_coming' AND (fc.id = ? OR sc.id = ?)", id, id)
+	res3, err := database.Query("SELECT matches.id, fc.id, fc.name, fc.logo, fc.present, sc.id, sc.name, sc.logo, sc.present, sorev.id, sorev.name, matches.data FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.status = 'up_coming' AND (fc.id = ? OR sc.id = ?)", id, id)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -177,7 +177,7 @@ func Sorevnivania(id string) []tablepoints {
 	// Таблица очков
 	name := []tablepoints {}
 	i := 1
-	res1, err := database.Query("SELECT commands.id, commands.name, commands.logo, commands.present, sorevnovania_and_commands.points FROM sorevnovania_and_commands JOIN commands ON commands.id = sorevnovania_and_commands.commands_id WHERE sorevnovania_and_commands.sorevnovania_id = ? ORDER BY sorevnovania_and_commands.points DESC", id)
+	res1, err := database.Query("SELECT commands.id, commands.name, commands.logo, commands.present, sorevnovania_and_commands.points FROM sorevnovania_and_commands JOIN commands_or_players AS commands ON commands.id = sorevnovania_and_commands.commands_id WHERE sorevnovania_and_commands.sorevnovania_id = ? ORDER BY sorevnovania_and_commands.points DESC", id)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -207,7 +207,7 @@ func getSorev(id string) sorevnovanie {
 
 func getPlayers(id string) []commands {
 	com := []commands {}
-	res, _ := database.Query("SELECT commands.id, commands.name, commands.logo, commands.present FROM `sorevnovania_and_commands` JOIN commands ON commands.id = sorevnovania_and_commands.commands_id WHERE sorevnovania_and_commands.sorevnovania_id = ?", id)
+	res, _ := database.Query("SELECT commands.id, commands.name, commands.logo, commands.present FROM `sorevnovania_and_commands` JOIN commands_or_players AS commands ON commands.id = sorevnovania_and_commands.commands_id WHERE sorevnovania_and_commands.sorevnovania_id = ?", id)
 	for res.Next() {
 		p := commands {}
 		res.Scan(&p.Id, &p.Name, &p.Logo, &p.Present)
@@ -246,7 +246,7 @@ func parseToken(tokenString string, mySigningKey []byte) (jwt.MapClaims, bool) {
 func checkUser(u, p string) (string, error) {
 	name := user {}
 	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", u)
-	res.Scan(&name.Id, &name.Login, &name.Password, &name.Type_id, &name.Token)
+	res.Scan(&name.Id, &name.Login, &name.Password, &name.Command.Id)
 
 	if len(name.Id) > 0 {
 		return "", errors.New("Такой пользователь уже существует")
@@ -364,4 +364,20 @@ func calendar(id string) []sorevnovanie {
 	}
 	
 	return send
+}
+
+func getUser(id string) user {
+	s := user {}
+	row := database.QueryRow("SELECT users.login, users.command_or_player_id, command.name, command.logo, command.present, sports.name FROM `users` JOIN commands_or_players AS command ON command.id = users.command_or_player_id JOIN sports ON sports.id = command.sports_id WHERE users.id = ?", id)
+	row.Scan(&s.Login, &s.Command.Id, s.Command.Name, &s.Command.Logo, &s.Command.Present, &s.Command.Sport.Name)
+
+	return s
+}
+
+func getDost(id string) rezults_command {
+	s := rezults_command {}
+	row := database.QueryRow("SELECT rezults_command.sorevnovanie_id, rezults_command.plase, sorev.name FROM `rezults_command` JOIN sorevnovania AS sorev ON sorev.id = rezults_command.sorevnovanie_id WHERE commands_or_players_id = ?", id)
+	row.Scan(&s.Sorev.Id, &s.Plase, &s.Sorev.Name)
+
+	return s
 }
