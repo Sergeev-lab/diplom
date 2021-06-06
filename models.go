@@ -70,7 +70,8 @@ type sorevnovanie struct {
 	Sport sports
 	Fdata, Sdata string
 	Level levels
-	Country, Subject, City type_
+	Country, Subject, City, Stadium type_
+	Map string
 }
 
 type sorevnovania_and_commands struct {

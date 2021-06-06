@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/swiper-bundle.css"/>
   <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 <body>
   <form id="form" @submit="checkForm" action="/register/" method="POST" class="form-signin" enctype="multipart/form-data">
@@ -31,14 +32,15 @@
         <option value="0">Вид спорта</option>
         <option value="3">Настольный теннис</option>
       </select>
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" name="Logo" id="customFile" lang="ru" accept="image/jpeg,image/png">
-        <label style="text-align: left;" class="custom-file-label" for="customFile">Загрузите логотип</label>
+      <div class="form-control">
+        <input v-on:change="previewFiles" type="file" name="file" id="file" class="input-file" accept="image/jpeg,image/png">
+        <label v-bind:class="file" for="file" class="btn btn-tertiary js-labelFile">
+          <i class="icon fa fa-check"></i>
+          <span class="js-fileName">Загрузить логотип</span>
+        </label>      
       </div>
       <input type="text" class="form-control" name="login" placeholder="Придумайте логин">
-      <label for="inputPassword" class="sr-only">Пароль</label>
       <input v-model="fpass" name="password" type="password" id="inputPassword1" class="form-control" placeholder="Пароль" required="">
-      <label for="inputPassword" class="sr-only">Повтор пароля</label>
       <input v-model="spass" type="password" id="inputPassword2" class="form-control" placeholder="Повтор пароля" required="">
       <button style="margin-top: 30px;" class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
     </div>
@@ -83,9 +85,10 @@
         spass: '',
         radio: '',
         select: '0',
+        file: '',
       },
       methods: {
-        checkForm: function (e) {
+        checkForm: function(e) {
           if (this.select == '0') {
             this.message = '* Выберите вид спорта';
             this.visible = true;
@@ -98,6 +101,10 @@
           } else {
             return true;
           }
+        },
+        previewFiles: function() {
+         this.file = 'has-file';
+         return
         },
       },
     });

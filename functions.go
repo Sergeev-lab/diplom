@@ -191,15 +191,33 @@ func Sorevnivania(id string) []tablepoints {
 	return name
 }
 
-func getSorevName(id string) string {
-	var name string
-	res1 := database.QueryRow("SELECT name FROM `sorevnovania` WHERE id = ?", id)
-	res1.Scan(&name)
+func getSorev(id string) sorevnovanie {
+	var s sorevnovanie
 
-	return name
+	res1 := database.QueryRow("SELECT sorevnovania.id, sorevnovania.name, sorevnovania.logo, sorevnovania.fdata, sorevnovania.sdata, lvl.name, country.name, subj.name, city.name, stad.name, sorevnovania.map FROM `sorevnovania` JOIN levels AS lvl ON lvl.id = sorevnovania.level_id  JOIN address AS country ON country.id = sorevnovania.country_id JOIN address AS subj ON subj.id = sorevnovania.subject_id JOIN address AS city ON city.id = sorevnovania.city_id JOIN address AS stad ON stad.id = sorevnovania.stadium_id WHERE sorevnovania.id = ?", id)
+	res1.Scan(&s.Id, &s.Name, &s.Logo, &s.Fdata, &s.Sdata, &s.Level.Name, &s.Country.Name, &s.Subject.Name, &s.City.Name, &s.Stadium.Name, &s.Map)
+	
+	t1, _ := time.Parse("2006-01-02", s.Fdata)
+	t2, _ := time.Parse("2006-01-02", s.Sdata)
+	s.Fdata = t1.Format("2 January 2006")
+	s.Sdata = t2.Format("2 January 2006")
+
+	return s
 }
 
-func getToken(mySigningKey []byte, id int64) string {
+func getPlayers(id string) []commands {
+	com := []commands {}
+	res, _ := database.Query("SELECT commands.id, commands.name, commands.logo, commands.present FROM `sorevnovania_and_commands` JOIN commands ON commands.id = sorevnovania_and_commands.commands_id WHERE sorevnovania_and_commands.sorevnovania_id = ?", id)
+	for res.Next() {
+		p := commands {}
+		res.Scan(&p.Id, &p.Name, &p.Logo, &p.Present)
+		com = append(com, p)
+	}
+
+	return com
+}
+
+func getToken(mySigningKey []byte, id int8) string {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := make(jwt.MapClaims)
@@ -212,17 +230,16 @@ func getToken(mySigningKey []byte, id int64) string {
 	return tokenString
 }
 
-func parseToken(tokenString string, mySigningKey []byte) bool {
+func parseToken(tokenString string, mySigningKey []byte) (jwt.MapClaims, bool) {
 	token, err :=jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(mySigningKey), nil
 	})
 
 	if err == nil && token.Valid {
-        // fmt.Println("Your token is valid.  I like your style.")
-		return true
+        claims := token.Claims.(jwt.MapClaims)
+		return claims, true
     } else {
-        // fmt.Println("This token is terrible!  I cannot accept this.")
-		return false
+		return nil, false
     }
 }
 
@@ -240,7 +257,7 @@ func checkUser(u, p string) (string, error) {
 		}
 		id, _ := res.LastInsertId()
 		
-		token := getToken(mySigningKey, id)
+		token := getToken(mySigningKey, int8(id))
 
 		return token, nil
 	}
@@ -275,6 +292,17 @@ func register(w http.ResponseWriter, r *http.Request) (error) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	
 	return nil
+}
+
+func login(n, p string) (int8, error) {
+	var id int8
+	row := database.QueryRow("SELECT id FROM `users` WHERE users.login=? AND users.password=?", n, p)
+	row.Scan(&id)
+	if id == 0 {
+		return id, errors.New("Не верный логин или пароль")
+	}
+
+	return id, nil
 }
 
 func cookieToken(w http.ResponseWriter, r *http.Request) (string, error) {
@@ -316,6 +344,24 @@ func newCommand(f url.Values, logo string) error {
 	return nil
 }
 
-func calendar(s string) {
+func calendar(id string) []sorevnovanie {
+	send := []sorevnovanie {}
+	data := time.Now().Format("2006-01-02 15:04")
+	res, err := database.Query("SELECT sorevnovania.id, sorevnovania.name, sorevnovania.fdata, sorevnovania.sdata, lvl.name, country.name, subj.name, city.name, stad.name FROM `sorevnovania` JOIN levels AS lvl ON lvl.id = sorevnovania.level_id  JOIN address AS country ON country.id = sorevnovania.country_id JOIN address AS subj ON subj.id = sorevnovania.subject_id JOIN address AS city ON city.id = sorevnovania.city_id JOIN address AS stad ON stad.id = sorevnovania.stadium_id WHERE  sorevnovania.fdata > ? AND sport_id = ?", data, id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for res.Next() {
+		sor := sorevnovanie {}
+		res.Scan(&sor.Id, &sor.Name, &sor.Fdata, &sor.Sdata, &sor.Level.Name, &sor.Country.Name, &sor.Subject.Name, &sor.City.Name, &sor.Stadium.Name)
+		
+		t1, _ := time.Parse("2006-01-02", sor.Fdata)
+		t2, _ := time.Parse("2006-01-02", sor.Sdata)
+		sor.Fdata = t1.Format("2 January 2006")
+		sor.Sdata = t2.Format("2 January 2006")
+
+		send = append(send, sor)
+	}
 	
+	return send
 }

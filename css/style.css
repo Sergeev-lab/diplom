@@ -704,3 +704,40 @@
   .table tbody a:hover {
     text-decoration: none;
   }
+
+.btn-tertiary {
+  color:#555;
+  padding:0;
+  line-height:30px;
+  margin:auto;
+  display:block;
+}
+.btn-tertiary:hover, .btn-tertiary:focus {
+  color:#888;
+}
+.input-file {
+  width:.1px;
+  height:.1px;
+  opacity:0;
+  overflow:hidden;
+  position:absolute;
+  z-index:-1
+}
+.input-file + .js-labelFile {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  cursor:pointer
+}
+.input-file + .js-labelFile .icon:before {
+  content:"\f093"
+}
+.input-file + .js-labelFile.has-file .icon:before {
+  content:"\f00c";
+  color:#5AAC7B
+}
+
+.table.sorev tbody tr:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  cursor: pointer;
+} 

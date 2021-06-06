@@ -5,5 +5,35 @@
 {{end}}
 
 {{define "main"}}
-<h1>Соревнования</h1>
+<div class="container">
+  <div style="margin-top: 25px;" class="row gy-5">
+    <div class="col">
+      <div class="p-3 border bg-light">
+        <h1 class="text-center">Календарь соревнований</h1>
+        <table class="table sorev">
+          <thead>
+            <tr>
+              <th>Название</th>
+              <th>С</th>
+              <th>По</th>
+              <th>Уровень</th>
+              <th>Местопроведение</th>
+          </tr>
+          </thead>
+          <tbody>
+            {{range .}}
+              <tr onclick="location.href='/sorevnovanie?id={{.Id}}';">
+                <td>{{.Name}}</td>
+                <td>{{.Fdata}}</td>
+                <td>{{.Sdata}}</td>
+                <td>{{.Level.Name}}</td>
+                <td>{{.Country.Name}}/{{.Subject.Name}}/{{.City.Name}}/{{.Stadium.Name}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 {{end}}

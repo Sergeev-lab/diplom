@@ -82,9 +82,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func calendarHandler(w http.ResponseWriter, r *http.Request) {
-	sport := r.URL.Query().Get("sport")
-
-	// send := calendar(sport)
+	send := calendar(r.URL.Query().Get("id"))
 
 	files := []string {
 		"templates/pages/calendar.page.tmpl",
@@ -119,15 +117,18 @@ func commandsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
-	type table struct {
-		Sorev string
+	id := r.URL.Query().Get("id")
+	
+	type data struct {
+		Sorev sorevnovanie
 		Table []tablepoints
+		Players []commands
 	}
 
-	id := r.URL.Query().Get("id")
-	send := table {
+	send := data {
 		Table: Sorevnivania(id),
-		Sorev: getSorevName(id),
+		Sorev: getSorev(id),
+		Players: getPlayers(id),
 	}
 
 	files := []string {
@@ -153,8 +154,40 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	var send error
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		id, err := login(r.Form.Get("username"), r.Form.Get("password"))
+		if err != nil {
+			send = err
+		} else {
+			token := getToken(mySigningKey, id)
+			cookie := http.Cookie{Name: "token", Path: "/", Value: token}
+			http.SetCookie(w, &cookie)
+
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
+	}
 
 	tmpl, _ := template.ParseFiles("templates/login.html")
+	tmpl.Execute(w, send)
+}
+
+func userHandler(w http.ResponseWriter, r *http.Request) {
+	token := w.Header().Get("Authorization")
+	claims, _ := parseToken(token, mySigningKey)
+	fmt.Println(claims)
+	if r.Method == http.MethodPost {
+		r.ParseMultipartForm(32 << 20)
+		fmt.Println(r.Form)
+		
+	}
+	
+	files := []string {
+		"templates/pages/user.page.tmpl",
+		"templates/layouts/index.layout.tmpl",
+	}
+	tmpl, _ := template.ParseFiles(files...)
 	tmpl.Execute(w, nil)
 }
 

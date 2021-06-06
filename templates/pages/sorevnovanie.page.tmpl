@@ -1,42 +1,79 @@
 {{template "index" .}}
 
 {{define "title"}}
-Hello World!
+  {{.Sorev.Name}}
 {{end}}
 
 {{define "main"}}
 <div class="container">
   <div style="margin-top: 25px;" class="row gy-5">
+    <div id="test" class="col">
+      <div class="p-3 border bg-light">
+        {{if .Sorev.Logo}}
+          <h1 style="text-align: center; margin-bottom: 20px;"><span><img class="img-thumbnail" style="margin-right: 10px;" width="70px" height="70px" src="{{.Sorev.Logo}}"></span>{{.Sorev.Name}}</h1>
+        {{else}}
+          <h1 style="text-align: center; margin-bottom: 20px;">{{.Sorev.Name}}</h1>
+        {{end}}
+        <div :hidden="dan" class="alert alert-danger alert-dismissible fade show" role="alert">
+          Заявку может отправить только авторизированный пользователь. Пожалуйста <a href="/login" class="alert-link">Авторизируйтесь</a>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <button :disabled="!dan" type="button" style="margin-bottom: 10px;" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal">Принять участие</button>
+        <div class="row">
+          <div class="col-6">
+            <h5>Информация</h5>
+            <h6>
+              <i class="far fa-calendar"></i> {{.Sorev.Fdata}} - {{.Sorev.Sdata}}
+            </h3>
+            <h6>
+              <i class="fas fa-trophy"></i> Уровень соревнования: {{.Sorev.Level.Name}}
+            </h6>
+            <h6>
+              <i class="fas fa-map-marker-alt"></i> {{.Sorev.Country.Name}} {{.Sorev.Subject.Name}} {{.Sorev.City.Name}} {{.Sorev.Stadium.Name}}
+            </h6>
+          </div>
+          <div class="col-6">
+            <h5 class="text-center">Участники</h5>
+            {{range .Players}}
+              {{if .Logo}}
+                <h6 class="text-center"><span><img class="img-thumbnail" style="margin-right: 10px;" width="50px" height="50px" src="{{.Logo}}"><a style="margin-right: 10px;" href="/commands?id={{.Id}}">{{.Name}}</a></span>({{.Present}})</h6>
+              {{else}}
+                <h6 class="text-center"><span><a style="margin-right: 10px;" href="/commands?id={{.Id}}">{{.Name}}</a></span>({{.Present}})</h6>
+              {{end}}
+            {{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <div style="margin-top: 25px;" class="row gy-5">
     <div class="col">
       <div class="p-3 border bg-light">
-        <h5 style="text-align: center; margin-bottom: 20px;">{{.Sorev}}</h5>
-        <table style="text-align: center;" class="table">
-            <thead>
-              <tr>
-                <th>Позиция</th>
-                <th>Команда</th>
-                <th>Очки</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{range .Table}}
-              <tr>
-                  <td>{{.Position}}</td>
-                  <td class="team-inline">
-                  <div class="team-figure"><img src="{{.Logo}}" alt="" width="45" height="45">
-                  </div>
-                  <div style="text-align: center;" class="team-title">
-                      <div class="team-name">
-                        <a href="/commands?id={{.Id}}">{{.Name}}</a>
-                      </div>
-                      <div class="team-country">{{.Present}}</div>
-                  </div>
-                  </td>
-                  <td>{{.Points}}</td>
-              </tr>
-              {{end}}
-            </tbody>
-        </table>
+        <script type="text/javascript" charset="utf-8" async src="{{.Sorev.Map}}"></script>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Отправить заявку на участие</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Вы действительно хотите отправить свою заявку?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <form name="form-forSorev" action="/send.php" method="post">
+            <input type="hidden" name="User" value="Sergeev">
+            <button type="submit" class="btn btn-success">Отправить</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

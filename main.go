@@ -43,6 +43,8 @@ func main() {
 	http.HandleFunc("/register/", registerHandler)
 	// Страничка с входом
 	http.HandleFunc("/login/", loginHandler)
+	// Страничка личного кабинета
+	http.HandleFunc("/user/", middleware(userHandler))
 
 	// Запуск сервера
 	fmt.Println("Server is listening...")

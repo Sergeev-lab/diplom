@@ -11,14 +11,12 @@
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
-    <form id="form" @submit="checkForm" action="/login/" method="POST" class="form-signin">
+    <form id="form" action="/login/" method="POST" class="form-signin">
         <img class="mb-4" src="/img/logo-default-213x82.png" alt="" width="150" height="150">
         <h1 class="h4 mb-4 font-weight-normal">Войти</h1>
         <p style="color: red; margin-bottom: 15px;">{{.}}</p>
-        <label for="inputLogin" class="sr-only">Логин</label>
         <input type="text" id="inputLogin" name="username" class="form-control" placeholder="Логин" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Пароль</label>
-        <input v-model="fpass" name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="">
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="">
         <button style="margin-top: 30px;" class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
     </form>
 
