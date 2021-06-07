@@ -31,7 +31,7 @@ func main() {
 	// Страничка с календарем
 	http.HandleFunc("/calendar/", calendarHandler)
 	// Страничка с историей
-	// http.HandleFunc("/history/", historyHandler)
+	http.HandleFunc("/history/", historyHandler)
 
 	// Страничка с командами
 	http.HandleFunc("/commands/", middleware(commandsHandler))

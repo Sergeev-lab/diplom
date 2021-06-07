@@ -55,8 +55,20 @@ func calendarHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, send)
 }
 
+func historyHandler(w http.ResponseWriter, r *http.Request) {
+	send := history(r.URL.Query().Get("id"))
+	
+	files := []string {
+		"templates/pages/history.page.tmpl",
+		"templates/layouts/index.layout.tmpl",
+	}
+	tmpl, _ := template.ParseFiles(files...)
+	tmpl.Execute(w, send)
+}
+
 func matchHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
+
 	send := Match(id)
 
 	files := []string {
@@ -71,6 +83,7 @@ func commandsHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 
 	send := Commands(id)
+
 	files := []string {
 		"templates/pages/commands.page.tmpl",
 		"templates/layouts/index.layout.tmpl",
@@ -80,26 +93,16 @@ func commandsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
-	// id := r.URL.Query().Get("id")
-	
-	// type data struct {
-	// 	Sorev sorevnovanie
-	// 	Table []tablepoints
-	// 	Players []commands
-	// }
+	id := r.URL.Query().Get("id")
 
-	// send := data {
-	// 	Table: Sorevnivania(id),
-	// 	Sorev: getSorev(id),
-	// 	Players: getPlayers(id),
-	// }
+	send := Sorevnivania(id)
 
 	files := []string {
 		"templates/pages/sorevnovanie.page.tmpl",
 		"templates/layouts/index.layout.tmpl",
 	}
 	tmpl, _ := template.ParseFiles(files...)
-	tmpl.Execute(w, nil)
+	tmpl.Execute(w, send)
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
@@ -137,30 +140,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func userHandler(w http.ResponseWriter, r *http.Request) {
-	type sent struct {
-		Data user
-		Dost rezults_command
-	}
-
 	token := w.Header().Get("Authorization")
 	claims, err := parseToken(token, mySigningKey)
 	if !err {
 		fmt.Println("Ошибка токена")
 	}
 	id := fmt.Sprintf("%v", claims["User_id"])
-	
-	dataUser := getUser(id)
 
-	send := sent {
-		Data: dataUser,
-		Dost: getDost(dataUser.Command.Id),
-	}
-
-	if r.Method == http.MethodPost {
-		r.ParseMultipartForm(32 << 20)
-		fmt.Println(r.Form)
-		
-	}
+	send := UserPage(id)
 	
 	files := []string {
 		"templates/pages/user.page.tmpl",

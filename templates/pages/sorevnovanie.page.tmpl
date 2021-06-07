@@ -1,7 +1,7 @@
 {{template "index" .}}
 
 {{define "title"}}
-  {{.Sorev.Name}}
+  {{.Sorevnovanie.Name}}
 {{end}}
 
 {{define "main"}}
@@ -9,10 +9,10 @@
   <div style="margin-top: 25px;" class="row gy-5">
     <div id="test" class="col">
       <div class="p-3 border bg-light">
-        {{if .Sorev.Logo}}
-          <h1 style="text-align: center; margin-bottom: 20px;"><span><img class="img-thumbnail" style="margin-right: 10px;" width="70px" height="70px" src="{{.Sorev.Logo}}"></span>{{.Sorev.Name}}</h1>
+        {{if .Sorevnovanie.Logo}}
+          <h1 style="text-align: center; margin-bottom: 20px;"><span><img class="img-thumbnail" style="margin-right: 10px;" width="70px" height="70px" src="{{.Sorevnovanie.Logo}}"></span>{{.Sorevnovanie.Name}}</h1>
         {{else}}
-          <h1 style="text-align: center; margin-bottom: 20px;">{{.Sorev.Name}}</h1>
+          <h1 style="text-align: center; margin-bottom: 20px;">{{.Sorevnovanie.Name}}</h1>
         {{end}}
         <div :hidden="dan" class="alert alert-danger alert-dismissible fade show" role="alert">
           Заявку может отправить только авторизированный пользователь. Пожалуйста <a href="/login" class="alert-link">Авторизируйтесь</a>
@@ -20,23 +20,26 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <button :disabled="!dan" type="button" style="margin-bottom: 10px;" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal">Принять участие</button>
-        <div class="row">
+        {{if .Points}}
+        {{else}}
+          <button :disabled="!dan" type="button" style="margin-bottom: 10px;" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal">Принять участие</button>
+        {{end}}
+          <div class="row gy-5">
           <div class="col-6">
             <h5>Информация</h5>
             <h6>
-              <i class="far fa-calendar"></i> {{.Sorev.Fdata}} - {{.Sorev.Sdata}}
+              <i class="far fa-calendar"></i> {{.Sorevnovanie.Fdata}} - {{.Sorevnovanie.Sdata}}
             </h3>
             <h6>
-              <i class="fas fa-trophy"></i> Уровень соревнования: {{.Sorev.Level.Name}}
+              <i class="fas fa-trophy"></i> Уровень соревнования: {{.Sorevnovanie.Level.Name}}
             </h6>
             <h6>
-              <i class="fas fa-map-marker-alt"></i> {{.Sorev.Country.Name}} {{.Sorev.Subject.Name}} {{.Sorev.City.Name}} {{.Sorev.Stadium.Name}}
+              <i class="fas fa-map-marker-alt"></i> {{.Sorevnovanie.Country.Name}} {{.Sorevnovanie.Subject.Name}} {{.Sorevnovanie.City.Name}} {{.Sorevnovanie.Stadium.Name}}
             </h6>
           </div>
           <div class="col-6">
             <h5 class="text-center">Участники</h5>
-            {{range .Players}}
+            {{range .Commands}}
               {{if .Logo}}
                 <h6 class="text-center"><span><img class="img-thumbnail" style="margin-right: 10px;" width="50px" height="50px" src="{{.Logo}}"><a style="margin-right: 10px;" href="/commands?id={{.Id}}">{{.Name}}</a></span>({{.Present}})</h6>
               {{else}}
@@ -47,11 +50,37 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
+  {{if .Points}}
   <div style="margin-top: 25px;" class="row gy-5">
     <div class="col">
       <div class="p-3 border bg-light">
-        <script type="text/javascript" charset="utf-8" async src="{{.Sorev.Map}}"></script>
+        <h5 class="text-center">Таблица очков</h5>
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th>Место</th>
+              <th>Команда</th>
+              <th>Кол-во очков</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Points}}
+              <tr>
+                <td></td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {{else}} 
+  {{end}}
+  <div style="margin-top: 25px;" class="row gy-5">
+    <div class="col">
+      <div class="p-3 border bg-light">
+        {{.Sorevnovanie.Map}}
       </div>
     </div>
   </div>

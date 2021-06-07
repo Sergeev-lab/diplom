@@ -73,6 +73,13 @@ type rezults_command struct {
 	Plase string
 }
 
+type rezults_sorev struct {
+	Id string
+	Sorevnovania sorevnovanie
+	Command commands
+	Points string
+}
+
 type sorevnovanie struct {
 	Id string
 	Name string
@@ -80,8 +87,8 @@ type sorevnovanie struct {
 	Sport sports
 	Fdata, Sdata string
 	Level levels
-	Country, Subject, City, Stadium type_
-	Map string
+	Country, Subject, City type_
+	Stadium stadium
 }
 
 type sorevnovania_and_commands struct {
@@ -102,6 +109,12 @@ type type_ struct {
 	Name string
 }
 
+type stadium struct {
+	Id string
+	Name string
+	Map string
+}
+
 // Пользовательские структуры //
 
 type sorevnovanie_and_match struct {
@@ -117,6 +130,18 @@ type for_match_page struct {
 
 type for_commands_page struct {
 	Info commands
+	Dost []rezults_command
 	Results []matches
 	Calendar []matches
+}
+
+type for_sorevnovanie_page struct {
+	Sorevnovanie sorevnovanie
+	Commands []commands
+	Points []rezults_sorev
+}
+
+type for_user_page struct {
+	Data user
+	Dost []rezults_command
 }

@@ -7,13 +7,17 @@
 {{define "main"}}
 <div id="myData" class="container">
   <div style="margin-top: 25px;" class="row gy-5">
-    <div class="col-6">
+    <div class="col-8">
       <div class="p-3 border bg-light">
-        <h5 class="text-center">Ваши данные</h5>
         <form action="/user/" method="post" enctype="multipart/form-data">
-          <h1 style="text-align: center; margin-bottom: 20px;"><span><img class="img-thumbnail" style="margin-right: 10px;" width="100px" height="100px" src="/img/commands/dynamo-kzn.png"></span>Динамо Казань</h1>
-          <h5>Логин: @Sergeev</h5>
-          <h5>Вид спорта: Хоккей на траве</h5>
+          <h1 style="text-align: center; margin-bottom: 20px;">{{.Data.Command.Name}}</h1>
+          <div style="margin-top: 0px; margin-bottom: 25px;" class="command-info-main">
+            <div class="command-info-team text-center">
+              <img src="/img/commands/dynamo-kzn.png" alt="" width="200" height="200">
+            </div>
+          </div>
+          <h5>Логин: {{.Data.Login}}</h5>
+          <h5>Вид спорта: {{.Data.Command.Sport.Name}}</h5>
           <ul class="list-inline">
             <li class="list-inline-item">
               <h5>Имя:</h5>
@@ -22,7 +26,7 @@
               <h5 :hidden="click">${name}$</h5>
             </li>
             <li class="list-inline-item">
-              <input :hidden="!click" v-model="name" type="text" name="newName" value="Динамо Казань">
+              <input :hidden="!click" v-model="name" type="text" name="newName" value="{{.Data.Command.Name}}">
             </li>
             <li class="list-inline-item">
               <button v-on:click="clickFunc" type="button" class="btn btn-outline-success">${btnText}$</button>
@@ -39,7 +43,7 @@
         </form>
       </div>
     </div>
-    <div class="col-6">
+    <div class="col-4">
       <div class="p-3 border bg-light">
         <h5 class="text-center">Ваши достижения</h5>
         <table class="table">
@@ -50,14 +54,12 @@
             </tr>
           </thead>
           <tbody>
+          {{range .Dost}}
             <tr>
-              <td>1</td>
-              <td>Кубок России</td>
+              <td>{{.Plase}}</td>
+              <td><a href="/sorevnovanie?id={{.Sorev.Id}}">{{.Sorev.Name}}</a></td>
             </tr>
-            <tr>
-              <td>1</td>
-              <td>Кубок России</td>
-            </tr>
+          {{end}}
           </tbody>
         </table>
       </div>

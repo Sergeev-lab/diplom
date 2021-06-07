@@ -55,9 +55,12 @@
         <option value="5">Баскетбол</option>
         <option value="6">Футбол</option>
       </select>
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" name="Logo" id="customFile" lang="ru" accept="image/jpeg,image/png">
-        <label style="text-align: left;" class="custom-file-label" for="customFile">Загрузите логотип</label>
+      <div class="form-control">
+        <input v-on:change="previewFiles" type="file" name="file" id="file" class="input-file" accept="image/jpeg,image/png">
+        <label v-bind:class="file" for="file" class="btn btn-tertiary js-labelFile">
+          <i class="icon fa fa-check"></i>
+          <span class="js-fileName">Загрузить логотип</span>
+        </label>      
       </div>
     <input type="text" class="form-control" name="login" placeholder="Придумайте логин">
     <label for="inputPassword" class="sr-only">Пароль</label>

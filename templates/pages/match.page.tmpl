@@ -1,13 +1,13 @@
 {{template "index" .}}
 
 {{define "title"}}
-  {{.Fc_name}} vs {{.Sc_name}}
+  {{.Match.Fcommand.Name}} - {{.Match.Scommand.Name}}
 {{end}}
 
 {{define "players"}}
 <tr>
   <td>{{.Number}}</td>
-  <td>{{.Name}}</td>
+  <td>{{.Person.Fio}}</td>
   <td>{{.Position}}</td>
 </tr>
 {{end}}
@@ -16,27 +16,27 @@
 <div class="container">
   <div class="game-result">
     <div class="game-info game-info-classic">
-      <p class="game-info-subtitle">{{.City}} / {{.Stad}} / {{.Data}}</p>
-      <a href="/sorevnovanie?id={{.Sorev_id}}" class="game-info-title">{{.Sorev_name}}</a>
+      <p class="game-info-subtitle">{{.Match.Sorevnovanie.City.Name}} / {{.Match.Sorevnovanie.Stadium.Name}} / {{.Match.Data}}</p>
+      <a href="/sorevnovanie?id={{.Match.Sorevnovanie.Id}}" class="game-info-title">{{.Match.Sorevnovanie.Name}}</a>
       <div class="game-info-main">
         <div class="game-info-team game-info-team-first">
-          <img src="{{.Fc_logo}}" alt="" width="100" height="100">
+          <img src="{{.Match.Fcommand.Logo}}" alt="" width="100" height="100">
           <div class="game-result-team-name">
-            <a href="/commands?id={{.Fc_id}}">{{.Fc_name}}</a>
+            <a href="/commands?id={{.Match.Fcommand.Id}}">{{.Match.Fcommand.Name}}</a>
           </div>
-          <div class="game-result-team-country">{{.Fc_present}}</div>
+          <div class="game-result-team-country">{{.Match.Fcommand.Present}}</div>
         </div>
         <div class="game-info-middle">
           <div class="game-result-score-wrap">
-            <div class="game-info-score">{{.Total}}</div>
+            <div class="game-info-score">{{.Match.Fscore}}:{{.Match.Sscore}}</div>
           </div>
         </div>
         <div class="game-info-team game-info-team-second">
-          <img src="{{.Sc_logo}}" alt="" width="100" height="100">
+          <img src="{{.Match.Scommand.Logo}}" alt="" width="100" height="100">
           <div class="game-result-team-name">
-            <a href="/commands?id={{.Sc_id}}">{{.Sc_name}}</a>
+            <a href="/commands?id={{.Match.Scommand.Id}}">{{.Match.Scommand.Name}}</a>
           </div>
-          <div class="game-result-team-country">{{.Sc_present}}</div>
+          <div class="game-result-team-country">{{.Match.Scommand.Present}}</div>
         </div>
       </div>
     </div>
@@ -47,8 +47,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th><img src="{{.Fc_logo}}" alt="" width="50px" height="50px"></th>
-              <th style="font-size: 15px;" colspan="2">{{.Fc_name}}</th>
+              <th><img src="{{.Match.Fcommand.Logo}}" alt="" width="50px" height="50px"></th>
+              <th style="font-size: 15px;" colspan="2">{{.Match.Fcommand.Name}}</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +57,7 @@
               <td>Имя</td>
               <td>Позиция</td>
             </tr>
-            {{range .Fc_players}}
+            {{range .Fplayers}}
               {{template "players" .}}
             {{end}}
           </tbody>
@@ -69,8 +69,8 @@
         <table class="table">
           <thead>
             <tr>
-              <th><img src="{{.Sc_logo}}" alt="" width="50px" height="50px"></th>
-              <th style="font-size: 15px;" colspan="2">{{.Sc_name}}</th>
+              <th><img src="{{.Match.Scommand.Logo}}" alt="" width="50px" height="50px"></th>
+              <th style="font-size: 15px;" colspan="2">{{.Match.Scommand.Name}}</th>
             </tr>
           </thead>
           <tbody>
@@ -79,7 +79,7 @@
               <td>Имя</td>
               <td>Позиция</td>
             </tr>
-            {{range .Sc_players}}
+            {{range .Splayers}}
               {{template "players" .}}
             {{end}}
           </tbody>
