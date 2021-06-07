@@ -73,7 +73,9 @@ var swiper = new Swiper(".mySwiper", {
       },
     },
     created: function() {
-      var oldname = document.getElementsByName("newName")[0];
-      this.name = oldname.value;
+      if (document.location.pathname == '/user/') {
+        var oldname = document.getElementsByName("newName")[0];
+        this.name = oldname.value;
+      }
     },
   });

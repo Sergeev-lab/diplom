@@ -43,14 +43,14 @@ func Sorev(id int) []sorevnovanie_and_match {
 	sor := []sorevnovanie_and_match {}
 	mat := []matches {}
 
-	res, err := database.Query("SELECT DISTINCT sorev.id, sorev.name FROM `matches` JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.data < ? AND matches.status = 'live' AND sorev.sport_id = ?", data, id)
+	res, err := database.Query("SELECT DISTINCT sorev.id, sorev.name FROM `matches` JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.data < ? AND matches.status != 'finish' AND sorev.sport_id = ?", data, id)
 	if err != nil {
 		fmt.Println(err)
 	}
 	for res.Next() {
 		p := sorevnovanie_and_match {}
 		res.Scan(&p.Sorevnovanie.Id, &p.Sorevnovanie.Name)
-		rest, _ := database.Query("SELECT matches.id, Fc.name, Sc.name, matches.fscore, matches.sscore FROM matches JOIN commands_or_players as Fc ON Fc.id = matches.fcommand_id JOIN commands_or_players as Sc ON Sc.id = matches.scommand_id WHERE matches.sorevnovania_id = ? AND matches.status = 'live'", p.Sorevnovanie.Id)
+		rest, _ := database.Query("SELECT matches.id, Fc.name, Sc.name, matches.fscore, matches.sscore FROM matches JOIN commands_or_players as Fc ON Fc.id = matches.fcommand_id JOIN commands_or_players as Sc ON Sc.id = matches.scommand_id WHERE matches.sorevnovania_id = ? AND matches.status != 'finish' AND matches.data < ?", p.Sorevnovanie.Id, data)
 		for rest.Next() {
 			a := matches {}
 			rest.Scan(&a.Id, &a.Fcommand.Name, &a.Scommand.Name, &a.Fscore, &a.Sscore)
@@ -108,6 +108,7 @@ func Match(id string) for_match_page {
 
 func Commands(id string) for_commands_page {
 	name := for_commands_page {}
+	data := time.Now().Format("2006-01-02 15:04")
 
 	// Информация о команде
 	res1 := database.QueryRow("SELECT commands_or_players.id, commands_or_players.name, commands_or_players.logo, commands_or_players.present, sports.name FROM `commands_or_players` JOIN sports ON sports.id = sports_id WHERE commands_or_players.id = ?", id)
@@ -143,7 +144,7 @@ func Commands(id string) for_commands_page {
 
 	// Календарь команды
 	aa := []matches {}
-	res3, err := database.Query("SELECT matches.id, fc.id, fc.name, fc.logo, fc.present, sc.id, sc.name, sc.logo, sc.present, sorev.id, sorev.name, matches.data FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.status = 'up_coming' AND (fc.id = ? OR sc.id = ?)", id, id)
+	res3, err := database.Query("SELECT matches.id, fc.id, fc.name, fc.logo, fc.present, sc.id, sc.name, sc.logo, sc.present, sorev.id, sorev.name, matches.data FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id WHERE matches.data > ? AND matches.status != 'finish' AND (fc.id = ? OR sc.id = ?)", data, id, id)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -164,8 +165,8 @@ func Sorevnivania(id string) for_sorevnovanie_page {
 
 	// Информация о соревновании
 	p := sorevnovanie {}
-	res1 := database.QueryRow("SELECT sorevnovania.name, sorevnovania.logo, sorevnovania.fdata, sorevnovania.sdata, levels.name, country.name, subject.name, city.name, stadium.name, sorevnovania.map FROM `sorevnovania` JOIN levels ON levels.id = sorevnovania.level_id JOIN address AS country ON country.id = sorevnovania.country_id JOIN address AS subject ON subject.id = sorevnovania.subject_id JOIN address AS city ON city.id = sorevnovania.city_id JOIN address AS stadium ON stadium.id = sorevnovania.stadium_id WHERE sorevnovania.id = ?", id)
-	res1.Scan(&p.Name, &p.Logo, &p.Fdata, &p.Sdata, &p.Level.Name, &p.Country.Name, &p.Subject.Name, &p.City.Name, &p.Stadium.Name, &p.Map)
+	res1 := database.QueryRow("SELECT sorevnovania.name, sorevnovania.logo, sorevnovania.fdata, sorevnovania.sdata, levels.name, country.name, subject.name, city.name, stadiums.name, stadiums.map FROM `sorevnovania` JOIN levels ON levels.id = sorevnovania.level_id JOIN address AS country ON country.id = sorevnovania.country_id JOIN address AS subject ON subject.id = sorevnovania.subject_id JOIN address AS city ON city.id = sorevnovania.city_id JOIN stadiums ON stadiums.id = sorevnovania.stadium_id WHERE sorevnovania.id = ?", id)
+	res1.Scan(&p.Name, &p.Logo, &p.Fdata, &p.Sdata, &p.Level.Name, &p.Country.Name, &p.Subject.Name, &p.City.Name, &p.Stadium.Name, &p.Stadium.Map)
 	s.Sorevnovanie = p
 
 	// Информация о участниках соревнорвания
@@ -204,7 +205,7 @@ func getSorev(id string) sorevnovanie {
 	var s sorevnovanie
 
 	res1 := database.QueryRow("SELECT sorevnovania.id, sorevnovania.name, sorevnovania.logo, sorevnovania.fdata, sorevnovania.sdata, lvl.name, country.name, subj.name, city.name, stad.name, sorevnovania.map FROM `sorevnovania` JOIN levels AS lvl ON lvl.id = sorevnovania.level_id  JOIN address AS country ON country.id = sorevnovania.country_id JOIN address AS subj ON subj.id = sorevnovania.subject_id JOIN address AS city ON city.id = sorevnovania.city_id JOIN address AS stad ON stad.id = sorevnovania.stadium_id WHERE sorevnovania.id = ?", id)
-	res1.Scan(&s.Id, &s.Name, &s.Logo, &s.Fdata, &s.Sdata, &s.Level.Name, &s.Country.Name, &s.Subject.Name, &s.City.Name, &s.Stadium.Name, &s.Map)
+	res1.Scan(&s.Id, &s.Name, &s.Logo, &s.Fdata, &s.Sdata, &s.Level.Name, &s.Country.Name, &s.Subject.Name, &s.City.Name, &s.Stadium.Name, &s.Stadium.Map)
 	
 	t1, _ := time.Parse("2006-01-02", s.Fdata)
 	t2, _ := time.Parse("2006-01-02", s.Sdata)
@@ -252,39 +253,21 @@ func parseToken(tokenString string, mySigningKey []byte) (jwt.MapClaims, bool) {
     }
 }
 
-func checkUser(u, p string) (string, error) {
-	name := user {}
-	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", u)
-	res.Scan(&name.Id, &name.Login, &name.Password, &name.Command.Id)
-
-	if len(name.Id) > 0 {
-		return "", errors.New("Такой пользователь уже существует")
-	} else {
-		res, err := database.Exec("INSERT INTO `users` (`id`, `login`, `password`, `type_id`) VALUES (NULL, ?, ?, '9')", u, p)
-		if err != nil {
-			return "", err
-		}
-		id, _ := res.LastInsertId()
-		
-		token := getToken(mySigningKey, int8(id))
-
-		return token, nil
-	}
-}
-
-func register(w http.ResponseWriter, r *http.Request) (error) {
+func register(w http.ResponseWriter, r *http.Request) error {
 	r.ParseMultipartForm(32 << 20)
 
 	// Проверяем есть ли такой пользователь с таким паролем в БД
-	token, err := checkUser(r.Form.Get("login"), r.Form.Get("password"))
-	if err != nil {
-		return err
+	name := user {}
+	res := database.QueryRow("SELECT * FROM `users` WHERE login = ?", r.Form.Get("login"))
+	res.Scan(&name.Id, &name.Login, &name.Password, &name.Command.Id)
+	if len(name.Id) > 0 {
+		return errors.New("Такой пользователь уже существует")
 	}
 
 	// Скачиваем изображение
 	pic, _, err := r.FormFile("Logo")
 	if err != nil {
-		return err
+		return errors.New("Ошибка при загрузке логотипа")
 	}
 	file, err := download(pic, "img/commands/")
 	if err != nil {
@@ -298,7 +281,7 @@ func register(w http.ResponseWriter, r *http.Request) (error) {
 	}
 
 	// Создаем нового пользователя
-	e := newUser(r.Form.Get("login"), r.Form.Get("password"), newCommand_id)
+	token, e := newUser(r.Form.Get("login"), r.Form.Get("password"), newCommand_id)
 	if e != nil {
 		return err
 	}
@@ -356,23 +339,27 @@ func download(pic multipart.File, path string) (string, error) {
 }
 
 func newCommand(f url.Values, logo string) (string, error) {
-	res, err := database.Exec("INSERT INTO `commands` (`id`, `name`, `logo`, `present`, `sports_id`) VALUES (NULL, ?, ?, ?, ?)", f.Get("name"), logo, f.Get("city"), f.Get("sport"))
+	res, err := database.Exec("INSERT INTO `commands_or_players` (`id`, `name`, `logo`, `present`, `sports_id`) VALUES (NULL, ?, ?, ?, ?)", f.Get("name"), logo, f.Get("city"), f.Get("sport"))
 	if err != nil {
 		return "", err
 	}
 
 	id, _ := res.LastInsertId()
+	update_id := fmt.Sprintf("%v", id)
 
-	return string(id), nil
+	return update_id, nil
 }
 
-func newUser(l, p, id string) error {
-	_, err := database.Exec("INSERT INTO `users` (`id`, `login`, `password`, `command_or_player_id`) VALUES (NULL, ?, ?, ?)", l, p, id)
+func newUser(l, p, id string) (string, error) {
+	res, err := database.Exec("INSERT INTO `users` (`id`, `login`, `password`, `command_or_player_id`) VALUES (NULL, ?, ?, ?)", l, p, id)
 	if err != nil {
-		return err
+		return "", err
 	}
+	user_id, _ := res.LastInsertId()
+
+	token := getToken(mySigningKey, int8(user_id))
 	
-	return nil
+	return token, nil
 }
 
 func calendar(id string) []sorevnovanie {
