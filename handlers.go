@@ -14,53 +14,15 @@ import (
 
 var mySigningKey = []byte("secret") 
 
-type player struct {
-	Number string
-	Name string
-	Position string
-}
-
-type formatch struct {
-	Fc_id string
-	Fc_name string
-	Fc_present string
-	Fc_logo string
-	Fc_players []player
-	Sc_id string
-	Sc_name string
-	Sc_present string
-	Sc_logo string
-	Sc_players []player
-	Sorev_id string
-	Sorev_name string
-	Total string
-	City string
-	Stad string
-	Data string
-}
-
-type sorev struct {
-	Id string
-	Name string
-	Match []math
-}
-
-type math struct {
-	Id string
-	Fc string
-	Sc string
-	Total string
-}
-
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	type data struct {
 		Slider []slider
-		Hockey []sorev
-		Volleyball []sorev
-		Table_tennis []sorev
-		Field_hockey []sorev
-		Basketball []sorev
-		Football []sorev
+		Hockey []sorevnovanie_and_match
+		Volleyball []sorevnovanie_and_match
+		Table_tennis []sorevnovanie_and_match
+		Field_hockey []sorevnovanie_and_match
+		Basketball []sorevnovanie_and_match
+		Football []sorevnovanie_and_match
 	}
 
 	send := data {
@@ -118,26 +80,26 @@ func commandsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	// id := r.URL.Query().Get("id")
 	
-	type data struct {
-		Sorev sorevnovanie
-		Table []tablepoints
-		Players []commands
-	}
+	// type data struct {
+	// 	Sorev sorevnovanie
+	// 	Table []tablepoints
+	// 	Players []commands
+	// }
 
-	send := data {
-		Table: Sorevnivania(id),
-		Sorev: getSorev(id),
-		Players: getPlayers(id),
-	}
+	// send := data {
+	// 	Table: Sorevnivania(id),
+	// 	Sorev: getSorev(id),
+	// 	Players: getPlayers(id),
+	// }
 
 	files := []string {
 		"templates/pages/sorevnovanie.page.tmpl",
 		"templates/layouts/index.layout.tmpl",
 	}
 	tmpl, _ := template.ParseFiles(files...)
-	tmpl.Execute(w, send)
+	tmpl.Execute(w, nil)
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
@@ -215,7 +177,7 @@ func logOut(w http.ResponseWriter, r *http.Request) {
 		MaxAge: -1,
 	}
 	http.SetCookie(w, &c)
-	
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

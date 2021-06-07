@@ -10,6 +10,15 @@ type address struct {
 	Type type_
 }
 
+type commands_and_person struct {
+	Id string
+	Sorevnovanie sorevnovanie
+	Commands commands
+	Person person
+	Number string
+	Position string
+}
+
 type commands struct {
 	Id string
 	Name string
@@ -25,13 +34,6 @@ type user struct {
 	Command commands
 }
 
-type commands_and_person struct {
-	Id string
-	Commands commands
-	Person person
-	Number string
-}
-
 type levels struct {
 	Id string
 	Name string
@@ -43,7 +45,9 @@ type matches struct {
 	Scommand commands
 	Data string
 	Sorevnovanie sorevnovanie
-	Total string
+	Fscore string
+	Sscore string
+	Status string
 }
 
 type person struct {
@@ -96,4 +100,23 @@ type sports struct {
 type type_ struct {
 	Id string
 	Name string
+}
+
+// Пользовательские структуры //
+
+type sorevnovanie_and_match struct {
+	Sorevnovanie sorevnovanie
+	Match []matches
+}
+
+type for_match_page struct {
+	Match matches
+	Fplayers []commands_and_person
+	Splayers []commands_and_person
+}
+
+type for_commands_page struct {
+	Info commands
+	Results []matches
+	Calendar []matches
 }

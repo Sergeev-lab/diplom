@@ -67,8 +67,8 @@
 {{define "match"}}
 <tr>
   <td><img src="/img/sport-icons/field-hockey.svg" alt=""></td>
-  <td><a href="/match?id={{.Id}}">{{.Fc}} - {{.Sc}}</a></td>
-  <td>{{.Total}}</td>
+  <td><a href="/match?id={{.Id}}">{{.Fcommand.Name}} - {{.Scommand.Name}}</a></td>
+  <td>{{.Fscore}}:{{.Sscore}}</td>
 </tr>
 {{end}}
 
@@ -77,8 +77,8 @@
   <thead class="thead-inverse">
     <tr>
       <th colspan="3">
-        <a href="sorevnovanie?id={{.Id}}">
-          {{.Name}}
+        <a href="sorevnovanie?id={{.Sorevnovanie.Id}}">
+          {{.Sorevnovanie.Name}}
         </a>
       </th>
     </tr>
