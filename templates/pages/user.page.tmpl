@@ -10,6 +10,7 @@
     <div class="col-8">
       <div class="p-3 border bg-light">
         <form action="/user/" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="Form" value="Profile">
           <h1 style="text-align: center; margin-bottom: 20px;">{{.Data.Command.Name}}</h1>
           <div style="margin-top: 0px; margin-bottom: 25px;" class="command-info-main">
             <div class="command-info-team text-center">
@@ -49,7 +50,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Мето</th>
+              <th>Меcто</th>
               <th>Соревнование</th>
             </tr>
           </thead>
@@ -62,6 +63,29 @@
           {{end}}
           </tbody>
         </table>
+        <form name="DoctijeniaForm" action="/user/" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="Form" value="Dost">
+          <div v-show="!visible">
+            <select name="place" style="margin-left: 15px; margin-right: 70px;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+            <select name="sorev">
+              {{range .Sorev}}
+                <option value="{{.Id}}">{{.Name}}</option>
+              {{end}}
+            </select>
+          </div>
+          <div id="input0"></div>
+          <button v-show="visible" v-on:click="visible = !visible" type="button" style="margin-top: 25px;" class="btn btn-outline-success btn-block">Добавить достижение</button>
+          <button type="submit" style="margin-top: 15px;" class="btn btn-success btn-block">Сохранить</button>
+        </form>
       </div>
     </div>
   </div>

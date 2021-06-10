@@ -140,15 +140,33 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func userHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(32 << 20)
+
 	token := w.Header().Get("Authorization")
 	claims, err := parseToken(token, mySigningKey)
-	if !err {
-		fmt.Println("Ошибка токена")
+	if err != nil {
+		fmt.Println(err)
+		w.Header().Del("Authorization")
+		logOut(w, r)
 	}
 	id := fmt.Sprintf("%v", claims["User_id"])
 
 	send := UserPage(id)
 	
+	if r.Method == http.MethodPost {
+		if r.Form.Get("Form") == "Profile" {
+			err := updateUser(r, id)
+			if err != nil {
+				fmt.Println(err)
+			}
+		} else {
+			addDost(r.Form, id)
+		}
+		
+		fmt.Println(r.Form)
+		http.Redirect(w, r, "/user/", http.StatusSeeOther)
+	}
+
 	files := []string {
 		"templates/pages/user.page.tmpl",
 		"templates/layouts/index.layout.tmpl",

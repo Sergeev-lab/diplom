@@ -240,17 +240,20 @@ func getToken(mySigningKey []byte, id int8) string {
 	return tokenString
 }
 
-func parseToken(tokenString string, mySigningKey []byte) (jwt.MapClaims, bool) {
-	token, err :=jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+func parseToken(tokenString string, mySigningKey []byte) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(mySigningKey), nil
 	})
-
-	if err == nil && token.Valid {
+	if err != nil {
+		return nil, err
+	}
+	if token.Valid {
+		fmt.Println("Токен валидный")
         claims := token.Claims.(jwt.MapClaims)
-		return claims, true
-    } else {
-		return nil, false
-    }
+		return claims, nil
+    } 
+
+	return nil, nil
 }
 
 func register(w http.ResponseWriter, r *http.Request) error {
@@ -418,15 +421,76 @@ func UserPage(id string) for_user_page {
 	// Получаем информацию о достижениях
 	dd := []rezults_command {}
 	d := rezults_command {}
-	res, err := database.Query("SELECT rezults_command.plase, rezults_command.sorevnovanie_id, sorev.name FROM `rezults_command` JOIN sorevnovania AS sorev ON sorev.id = rezults_command.sorevnovanie_id WHERE commands_or_players_id = ?", s.Command.Id)
+	res1, err := database.Query("SELECT rezults_command.plase, rezults_command.sorevnovanie_id, sorev.name FROM `rezults_command` JOIN sorevnovania AS sorev ON sorev.id = rezults_command.sorevnovanie_id WHERE commands_or_players_id = ?", s.Command.Id)
 	if err != nil {
 		fmt.Println(err)
 	}
-	for res.Next() {
-		res.Scan(&d.Plase, &d.Sorev.Id, &d.Sorev.Name)
+	for res1.Next() {
+		res1.Scan(&d.Plase, &d.Sorev.Id, &d.Sorev.Name)
 		dd = append(dd, d)
 	}
 	u.Dost = dd
 
+	// Получаем список соревнований в который команда принимала участие
+	aa := []sorevnovanie {}
+	a := sorevnovanie {}
+	res2, err := database.Query("SELECT sorev.id, sorev.name FROM `rezults_sorev` JOIN sorevnovania AS sorev ON sorev.id = sorevnovania_id WHERE commands_or_players_id = ?", s.Command.Id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for res2.Next() {
+		res2.Scan(&a.Id, &a.Name)
+		aa = append(aa, a)
+	}
+	u.Sorev = aa
+
 	return u
+}
+
+func updateUser(r *http.Request, id string) error {
+	var command_id string
+	res := database.QueryRow("SELECT `command_or_player_id` FROM `users` WHERE id = ?", id)
+	res.Scan(&command_id)
+
+	// Обновление картинки
+	if _, ok := r.Form["newFile"]; !ok {
+		file, _, err := r.FormFile("newFile")
+		if err != nil {
+			return err
+		}
+
+		name, err := download(file, "img/commands/")
+		if err != nil {
+			return err
+		}
+
+		_, er := database.Exec("UPDATE `commands_or_players` SET `logo` = ?  WHERE `commands_or_players`.`id` = ?", "/" + name, command_id)
+		if er != nil {
+			return er
+		}
+	}
+
+	// Обновление информации
+	_, er := database.Exec("UPDATE `commands_or_players` SET `name` = ? WHERE `commands_or_players`.`id` = ?", r.Form.Get("newName"), command_id)
+	if er != nil {
+		return er
+	}
+
+	return nil
+}
+
+func addDost(f url.Values, id string) {
+	var command_id string
+	res := database.QueryRow("SELECT `command_or_player_id` FROM `users` WHERE id = ?", id)
+	res.Scan(&command_id)
+
+	place := f.Get("place")
+	sorev := f.Get("sorev")
+
+	fmt.Println(command_id, place, sorev)
+
+	_, err := database.Exec("INSERT INTO `rezults_command` (`id`, `commands_or_players_id`, `sorevnovanie_id`, `plase`) VALUES (NULL, ?, ?, ?)", command_id, sorev, place)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

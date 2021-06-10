@@ -48,7 +48,7 @@ var swiper = new Swiper(".mySwiper", {
       text: false,
     },
   });
-
+  var x = 0;
   var a = new Vue ({
     delimiters: ['${', '}$'],
     el: '#myData',
@@ -57,6 +57,7 @@ var swiper = new Swiper(".mySwiper", {
       click: false,
       name: '',
       btnText: 'Изменить',
+      visible: true,
     },
     methods: {
       previewFiles: function() {
@@ -70,6 +71,9 @@ var swiper = new Swiper(".mySwiper", {
         } else {
           this.btnText = 'Изменить';
         };
+      },
+      clickBtn: function() {
+        window.location.reload();
       },
     },
     created: function() {

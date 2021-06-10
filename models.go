@@ -144,4 +144,5 @@ type for_sorevnovanie_page struct {
 type for_user_page struct {
 	Data user
 	Dost []rezults_command
+	Sorev []sorevnovanie
 }

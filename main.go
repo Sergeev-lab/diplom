@@ -10,17 +10,13 @@ import (
 var database *sql.DB
 
 func main() {
-
+	// Подключение к БД
 	db, err := sql.Open("mysql", "root:@/diplom")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	database = db
-
-	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 	
 	// Главная страничка
 	http.HandleFunc("/", middleware(indexHandler))
@@ -47,6 +43,11 @@ func main() {
 	http.HandleFunc("/user/", middleware(userHandler))
 	// Страничка личного кабинета
 	http.HandleFunc("/user/logout/", logOut)
+
+	// Статические файлы
+	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 
 	// Запуск сервера
 	fmt.Println("Server is listening...")
