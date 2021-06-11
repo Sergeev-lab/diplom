@@ -4,12 +4,6 @@ import (
 	"net/http"
 	"html/template"
 	"fmt"
-	
-	
-	// "bytes"
-    // "encoding/json"
-	// "encoding/json"
-	// "time"
 )
 
 var mySigningKey = []byte("secret") 
@@ -94,8 +88,23 @@ func commandsHandler(w http.ResponseWriter, r *http.Request) {
 
 func sorevnovanieHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
+	token := w.Header().Get("Authorization")
+	claims, err := parseToken(token, mySigningKey)
+	if err != nil {
+		fmt.Println(err)
+		w.Header().Del("Authorization")
+	}
+	user_id := fmt.Sprintf("%v", claims["User_id"])
 
 	send := Sorevnivania(id)
+
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		err := sendMail(r.Form, user_id)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 
 	files := []string {
 		"templates/pages/sorevnovanie.page.tmpl",
@@ -188,10 +197,10 @@ func logOut(w http.ResponseWriter, r *http.Request) {
 
 func middleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Hello from middleware")
 		cookie, err := r.Cookie("token")
 		if err != nil {
 			fmt.Println(err)
+			w.Header().Del("Authorization")
 		} else {
 			w.Header().Set("Authorization", cookie.Value)
 		}

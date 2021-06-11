@@ -136,6 +136,7 @@ type for_commands_page struct {
 }
 
 type for_sorevnovanie_page struct {
+	User string
 	Sorevnovanie sorevnovanie
 	Commands []commands
 	Points []rezults_sorev

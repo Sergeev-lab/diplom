@@ -10,6 +10,8 @@ import (
 	"io/ioutil"
 	"strings"
 	"net/http"
+	"net/smtp"
+	// "bytes"
 )
 
 type tablepoints struct {
@@ -161,7 +163,9 @@ func Commands(id string) for_commands_page {
 }
 
 func Sorevnivania(id string) for_sorevnovanie_page {
-	s := for_sorevnovanie_page {}
+	s := for_sorevnovanie_page {
+		User: "HelloWOrld!",
+	}
 
 	// Информация о соревновании
 	p := sorevnovanie {}
@@ -493,4 +497,56 @@ func addDost(f url.Values, id string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func sendMail(r url.Values, user_id string) error {
+	// Получаем информация о пользователе
+	s := user {
+		Id: user_id,
+	}
+	row1 := database.QueryRow("SELECT users.login, users.command_or_player_id, command.name FROM `users` JOIN commands_or_players AS command ON command.id = users.command_or_player_id JOIN sports ON sports.id = command.sports_id WHERE users.id = ?", user_id)
+	row1.Scan(&s.Login, &s.Command.Id, &s.Command.Name)
+
+	// Получаем информаци о соревновании
+	var sorev string
+	row2 := database.QueryRow("SELECT name FROM `sorevnovania` WHERE id = ?", r.Get("id"))
+	row2.Scan(&sorev)
+
+	// Формируем сообщение
+	to := []string{"sergeev.nlint@yandex.ru"}
+	body := `
+	<html>
+		<body>
+			<h3>
+				Заявка на участие в соревновании
+			</h3>
+			<table>
+				<tbody>
+					<tr>
+						<td>Пользователь: ` + s.Login + `</td>
+						<td>Id в базе: ` + s.Id + `</td>
+					</tr>
+					<tr>
+						<td>Команда: ` + s.Command.Name + `</td>
+						<td>Id в базе: ` + s.Command.Id + `</td>
+					</tr>
+					<tr>
+						<td>Соревнование: ` + sorev + `</td>
+						<td>Id в базе: ` + r.Get("id") + `</td>
+					</tr>
+				</tbody>
+			</table>
+		</body>
+	</html>
+	`
+	msg := []byte("To: sergeev.nlint@yandex.ru\r\nSubject: Mail from golang" + "\r\n" + "Content-Type: text/html; charset=UTF-8" + "\r\n\r\n" + body)
+
+	auth := smtp.PlainAuth("", "sergeev.nlint@yandex.ru", "szfvbzqceasmqevp", "smtp.yandex.ru")
+
+	err := smtp.SendMail("smtp.yandex.ru:587", auth, "sergeev.nlint@yandex.ru", to, msg)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return nil
 }

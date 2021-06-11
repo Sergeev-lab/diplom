@@ -98,8 +98,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <form name="form-forSorev" action="/send.php" method="post">
-            <input type="hidden" name="User" value="Sergeev">
+          <form name="form-forSorev" action="" method="post">
+            <input type="hidden" name="User_id" value="{{.User}}}">
             <button type="submit" class="btn btn-success">Отправить</button>
           </form>
         </div>
@@ -108,3 +108,4 @@
   </div>
 </div>
 {{end}}
+
