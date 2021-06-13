@@ -39,6 +39,8 @@ func main() {
 	http.HandleFunc("/register/", registerHandler)
 	// Страничка с входом
 	http.HandleFunc("/login/", loginHandler)
+	// Страничка с входом для администратора
+	http.HandleFunc("/login/admin/", loginAdminHandler)
 	// Страничка личного кабинета
 	http.HandleFunc("/user/", middleware(userHandler))
 	// Страничка личного кабинета

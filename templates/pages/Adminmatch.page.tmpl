@@ -26,18 +26,24 @@
           </div>
           <div class="game-result-team-country">{{.Match.Fcommand.Present}}</div>
         </div>
-        <div class="game-info-middle">
-          {{if eq .Match.Status "live"}}
+        <div style="flex-grow: inherit;" class="game-info-middle">
+          <form id="adminEdit" action="" method="post">
+            {{if eq .Match.Status "live"}}
+            <button v-on:click="Update" style="display: block; margin-bottom: 10px;" name="EndMatch" value="true" class="btn btn-outline-success btn-block">Завершить матч</button>
             <h4 class="btn btn-danger disabled">live</h4>
-            <div class="game-info-score">{{.Match.Fscore}} : {{.Match.Sscore}}</div>
-          {{end}}
-          {{if eq .Match.Status "finish"}}
-            <h4 class="btn btn-dark disabled">end</h4>
-            <div class="game-info-score">{{.Match.Fscore}} : {{.Match.Sscore}}</div>
-          {{end}}
-          {{if eq .Match.Status "up_coming"}}
-            <h4 class="btn btn-success disabled">up coming</h4>
-          {{end}}
+            {{end}}
+            {{if eq .Match.Status "finish"}}
+              <h4 class="btn btn-dark disabled">end</h4>
+            {{end}}
+            {{if eq .Match.Status "up_coming"}}
+              <h4 class="btn btn-sucess disabled">up coming</h4>
+            {{end}}
+            <div class="game-result-score-wrap">
+              <input style="text-align: center;" type="number" name="Fscore" value="{{.Match.Fscore}}">
+              <input style="text-align: center;" type="number" name="Sscore" value="{{.Match.Sscore}}">
+              <button v-on:click="Update" style="display: block; margin-top: 10px;" class="btn btn-success btn-block">Сохранить</button>
+            </div>
+          </form>
         </div>
         <div class="game-info-team game-info-team-second">
           <img src="{{.Match.Scommand.Logo}}" alt="" width="100" height="100">

@@ -4,6 +4,29 @@
   {{.Sorevnovanie.Name}}
 {{end}}
 
+{{define "history"}}
+  <div class="game-results game-result-classic" onclick="location.href='/match?id={{.Id}}';">
+    <div class="game-result-main">
+      <div class="game-result-team game-result-team-first">
+        <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Fcommand.Logo}}" alt="" width="70" height="70">
+        </figure>
+        <div class="game-result-team-name">{{.Fcommand.Name}}</div>
+      </div>
+      <div class="game-result-middle">
+        {{if eq .Status "up_coming"}}
+        {{else}}
+          <h3>{{.Fscore}}:{{.Sscore}}</h3>
+        {{end}}
+      </div>
+      <div class="game-result-team game-result-team-second">
+        <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Scommand.Logo}}" alt="" width="70" height="70">
+        </figure>
+        <div class="game-result-team-name">{{.Scommand.Name}}</div>
+      </div>
+    </div>
+  </div>
+{{end}}
+
 {{define "main"}}
 <div class="container">
   <div style="margin-top: 25px;" class="row gy-5">
@@ -59,7 +82,6 @@
         <table class="table text-center">
           <thead>
             <tr>
-              <th>Место</th>
               <th>Команда</th>
               <th>Кол-во очков</th>
             </tr>
@@ -67,7 +89,8 @@
           <tbody>
             {{range .Points}}
               <tr>
-                <td></td>
+                <td><a href="/commands?id={{.Command.Id}}">{{.Command.Name}}</a></td>
+                <td>{{.Points}}</td>
               </tr>
             {{end}}
           </tbody>
@@ -77,6 +100,40 @@
   </div>
   {{else}} 
   {{end}}
+
+  <div style="margin-top: 25px;" class="row gy-5">
+    {{if .History}}
+    <div class="col-4">
+      <div class="p-3 border bg-light">
+        <h5 class="text-center">Последние матчи</h5>
+        {{range .History}}
+          {{template "history" .}}
+        {{end}}
+      </div>
+    </div>
+    {{end}}
+    {{if .Live}}
+    <div class="col-4">
+      <div class="p-3 border bg-light">
+        <h5 class="text-center">Live матчи</h5>
+        {{range .Live}}
+          {{template "history" .}}
+        {{end}}
+      </div>
+    </div>
+    {{end}}
+    {{if .Kalendar}}
+    <div class="col-4">
+      <div class="p-3 border bg-light">
+        <h5 class="text-center">Следующие матчи</h5>
+        {{range .Kalendar}}
+          {{template "history" .}}
+        {{end}}
+      </div>
+    </div>
+    {{end}}
+  </div>
+
   <div style="margin-top: 25px;" class="row gy-5">
     <div class="col">
       <div class="p-3 border bg-light">
@@ -99,7 +156,6 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
           <form name="form-forSorev" action="" method="post">
-            <input type="hidden" name="User_id" value="{{.User}}}">
             <button type="submit" class="btn btn-success">Отправить</button>
           </form>
         </div>
@@ -109,3 +165,20 @@
 </div>
 {{end}}
 
+<!-- <div class="game-results game-result-classic" onclick="location.href='/match?id={{.Id}}';">
+  <div class="game-result-main">
+    <div class="game-result-team game-result-team-first">
+      <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Fcommand.Logo}}" alt="" width="70" height="70">
+      </figure>
+      <div class="game-result-team-name">{{.Fcommand.Name}}</div>
+    </div>
+    <div class="game-result-middle">
+      <h3>{{.Fscore}}:{{.Sscore}}</h3>
+    </div>
+    <div class="game-result-team game-result-team-second">
+      <figure class="game-result-team-figure game-result-team-figure-big"><img src="{{.Scommand.Logo}}" alt="" width="70" height="70">
+      </figure>
+      <div class="game-result-team-name">{{.Scommand.Name}}</div>
+    </div>
+  </div>
+</div> -->

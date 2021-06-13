@@ -123,7 +123,9 @@ type sorevnovanie_and_match struct {
 }
 
 type for_match_page struct {
+	Admin bool
 	Match matches
+	Score string
 	Fplayers []commands_and_person
 	Splayers []commands_and_person
 }
@@ -136,9 +138,11 @@ type for_commands_page struct {
 }
 
 type for_sorevnovanie_page struct {
-	User string
 	Sorevnovanie sorevnovanie
 	Commands []commands
+	History []matches
+	Live []matches
+	Kalendar []matches
 	Points []rezults_sorev
 }
 

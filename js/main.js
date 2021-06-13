@@ -40,6 +40,16 @@ var swiper = new Swiper(".mySwiper", {
     },
   });
 
+  var admin = new Vue ({
+    delimiters: ['${', '}$'],
+    el: '#adminEdit',
+    methods: {
+      Update: function() {
+        console.log("KEKKE");
+      },
+    },
+  });
+
   var ap = new Vue ({
     delimiters: ['${', '}$'],
     el: '#test',
@@ -48,6 +58,7 @@ var swiper = new Swiper(".mySwiper", {
       text: false,
     },
   });
+
   var x = 0;
   var a = new Vue ({
     delimiters: ['${', '}$'],

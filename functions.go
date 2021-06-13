@@ -67,20 +67,23 @@ func Sorev(id int) []sorevnovanie_and_match {
 }
 
 func Match(id string) for_match_page {
+	data := time.Now().Format("2006-01-02 15:04")
 	p := for_match_page {}
 	f1 := []commands_and_person {}
 	f2 := []commands_and_person {}
 
 	// Информация о матче
-	res, err := database.Query("SELECT fc.id, fc.name, fc.present, fc.logo, sc.id, sc.name, sc.present, sc.logo, sorev.id, sorev.name, fscore, sscore, city.name, stad.name, data FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id JOIN address AS city ON city.id = sorev.city_id JOIN address AS stad ON stad.id = sorev.stadium_id WHERE matches.id = ?", id)
-	if err != nil {
-		fmt.Println(err)
+	res := database.QueryRow("SELECT fc.id, fc.name, fc.present, fc.logo, sc.id, sc.name, sc.present, sc.logo, sorev.id, sorev.name, fscore, sscore, city.name, stad.name, data, status FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id JOIN address AS city ON city.id = sorev.city_id JOIN address AS stad ON stad.id = sorev.stadium_id WHERE matches.id = ?", id)
+	res.Scan(&p.Match.Fcommand.Id, &p.Match.Fcommand.Name, &p.Match.Fcommand.Present, &p.Match.Fcommand.Logo, &p.Match.Scommand.Id, &p.Match.Scommand.Name, &p.Match.Scommand.Present, &p.Match.Scommand.Logo, &p.Match.Sorevnovanie.Id, &p.Match.Sorevnovanie.Name, &p.Match.Fscore, &p.Match.Sscore, &p.Match.Sorevnovanie.City.Name, &p.Match.Sorevnovanie.Stadium.Name, &p.Match.Data, &p.Match.Status)
+
+	if p.Match.Data > data {
+		p.Match.Status = "up_coming"
 	}
-	for res.Next() {
-		res.Scan(&p.Match.Fcommand.Id, &p.Match.Fcommand.Name, &p.Match.Fcommand.Present, &p.Match.Fcommand.Logo, &p.Match.Scommand.Id, &p.Match.Scommand.Name, &p.Match.Scommand.Present, &p.Match.Scommand.Logo, &p.Match.Sorevnovanie.Id, &p.Match.Sorevnovanie.Name, &p.Match.Fscore, &p.Match.Sscore, &p.Match.Sorevnovanie.City.Name, &p.Match.Sorevnovanie.Stadium.Name, &p.Match.Data)
-		t, _ := time.Parse("2006-01-02 15:04:05", p.Match.Data)
-		p.Match.Data = t.Format("2 January 2006 15:04")
-	}	
+	if p.Match.Data < data && p.Match.Status != "finish" {
+		p.Match.Status = "live"
+	}
+	t, _ := time.Parse("2006-01-02 15:04:05", p.Match.Data)
+	p.Match.Data = t.Format("2 January 2006 15:04")
 	
 	// Список игроков 1ой команды
 	res2, err := database.Query("SELECT number, person.fio, position FROM `commands_and_person` JOIN person ON person.id = person_id WHERE sorevnovania_id = ? AND commands_id = ?", p.Match.Sorevnovanie.Id, p.Match.Fcommand.Id)
@@ -163,9 +166,8 @@ func Commands(id string) for_commands_page {
 }
 
 func Sorevnivania(id string) for_sorevnovanie_page {
-	s := for_sorevnovanie_page {
-		User: "HelloWOrld!",
-	}
+	data := time.Now().Format("2006-01-02 15:04")
+	s := for_sorevnovanie_page {}
 
 	// Информация о соревновании
 	p := sorevnovanie {}
@@ -186,8 +188,34 @@ func Sorevnivania(id string) for_sorevnovanie_page {
 	}
 	s.Commands = cc
 
+	// История, Live и Календарь матчей
+	hh := []matches {}
+	ll := []matches {}
+	uu := []matches {}
+	h := matches {}
+	res2, errr := database.Query("SELECT fc.id, fc.name, fc.logo, sc.id, sc.name, sc.logo, sorev.id, fscore, sscore, data, status FROM matches JOIN commands_or_players AS fc ON fc.id = matches.fcommand_id JOIN commands_or_players AS sc ON sc.id = matches.scommand_id JOIN sorevnovania AS sorev ON sorev.id = matches.sorevnovania_id JOIN address AS city ON city.id = sorev.city_id JOIN address AS stad ON stad.id = sorev.stadium_id WHERE matches.sorevnovania_id = ?", id)
+	if errr != nil {
+		fmt.Println(errr)
+	}
+	for res2.Next() {
+		res2.Scan(&h.Fcommand.Id, &h.Fcommand.Name, &h.Fcommand.Logo, &h.Scommand.Id, &h.Scommand.Name, &h.Scommand.Logo, &h.Sorevnovanie.Id, &h.Fscore, &h.Sscore, &h.Data, &h.Status)
+		if h.Data > data {
+			h.Status = "up_coming"
+			uu = append(uu, h)
+		} 
+		if h.Data < data && h.Status != "finish" {
+			h.Status = "live"
+			ll = append(ll, h)
+		}
+		if h.Status == "finish" {
+			hh = append(hh, h)
+		}
+	}
+	s.History = hh
+	s.Live = ll
+	s.Kalendar = uu
+
 	// Информация о таблице очков
-	data := time.Now().Format("2006-01-02")
 	tt := []rezults_sorev {}
 	if p.Fdata < data || p.Fdata == data {
 		t := rezults_sorev {}
@@ -306,6 +334,17 @@ func register(w http.ResponseWriter, r *http.Request) error {
 func login(n, p string) (int8, error) {
 	var id int8
 	row := database.QueryRow("SELECT id FROM `users` WHERE users.login=? AND users.password=?", n, p)
+	row.Scan(&id)
+	if id == 0 {
+		return id, errors.New("Не верный логин или пароль")
+	}
+
+	return id, nil
+}
+
+func adminLogin(n, p string) (int8, error) {
+	var id int8
+	row := database.QueryRow("SELECT id FROM `staff` WHERE login = ? AND password = ?", n, p)
 	row.Scan(&id)
 	if id == 0 {
 		return id, errors.New("Не верный логин или пароль")

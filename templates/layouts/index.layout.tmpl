@@ -55,18 +55,16 @@
               <a class="dropdown-item" href="/history?id=6">Футбол</a>
             </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Контакты</a>
-          </li>
         </ul>
         <div id="auth" class="d-flex align-items-center">
           
-          <li v-if="auth != null" class="list-inline-item"><a class="btn btn-success btn-sm" href="/user">Личный кабинет</a></li>
-          <li v-if="auth != null" class="list-inline-item"><a class="btn btn-outline-success btn-sm" href="/user/logout">Выйти</a></li>
+          <li v-if="auth != null && auth != 'Admin'" class="list-inline-item"><a class="btn btn-success btn-sm" href="/user">Личный кабинет</a></li>
+          <li v-if="auth != null && auth != 'Admin'" class="list-inline-item"><a class="btn btn-outline-success btn-sm" href="/user/logout">Выйти</a></li>
 
           <li v-if="auth == null" class="list-inline-item"><a class="btn btn-success btn-sm" href="/register">Регистрация</a></li>
           <li v-if="auth == null" class="list-inline-item"><a class="btn btn-outline-success btn-sm" href="/login">Войти</a></li>
           
+          <li v-if="auth == 'Admin'" class="list-inline-item"><a class="btn btn-outline-success btn-sm" href="/user/logout">Выйти</a></li>
         </div>
       </div>
     </div>

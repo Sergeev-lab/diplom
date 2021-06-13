@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Войти</title>
+    <link rel="icon" href="/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/swiper-bundle.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+    <form id="form" action="/login/admin/" method="POST" class="form-signin">
+        <img class="mb-4" src="/img/logo-default-213x82.png" alt="" width="150" height="150">
+        <h1 class="h4 mb-4 font-weight-normal">Войти с правами администратора</h1>
+        <p style="color: red; margin-bottom: 15px;">{{.}}</p>
+        <input type="text" id="inputLogin" name="username" class="form-control" placeholder="Логин" required="" autofocus="">
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="">
+        <button style="margin-top: 30px;" class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    </form>
+
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="/js/vue.js"></script>
+  <script src="/js/swiper-bundle.js"></script>
+  <script src="/js/main.js" type="text/javascript"></script>
+</body>
+</html>

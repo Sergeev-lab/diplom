@@ -61,14 +61,37 @@ func historyHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func matchHandler(w http.ResponseWriter, r *http.Request) {
+	var files []string
 	id := r.URL.Query().Get("id")
+
+	if w.Header().Get("Authorization") == "Admin" {
+		files = []string {
+			"templates/pages/Adminmatch.page.tmpl",
+			"templates/layouts/index.layout.tmpl",
+		}
+	} else {
+		files = []string {
+			"templates/pages/match.page.tmpl",
+			"templates/layouts/index.layout.tmpl",
+		}
+	}
 
 	send := Match(id)
 
-	files := []string {
-		"templates/pages/match.page.tmpl",
-		"templates/layouts/index.layout.tmpl",
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		if r.Form.Get("EndMatch") == "true" {
+			_, err := database.Exec("UPDATE `matches` SET `fscore` = ?, `sscore` = ?, `status` = 'finish' WHERE `matches`.`id` = ?", r.Form.Get("Fscore"), r.Form.Get("Sscore"), r.Form.Get("id"))
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		_, err := database.Exec("UPDATE `matches` SET `fscore` = ?, `sscore` = ? WHERE `matches`.`id` = ?", r.Form.Get("Fscore"), r.Form.Get("Sscore"), r.Form.Get("id"))
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
+	
 	tmpl, _ := template.ParseFiles(files...)
 	tmpl.Execute(w, send)
 }
@@ -145,6 +168,25 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl, _ := template.ParseFiles("templates/login.html")
+	tmpl.Execute(w, send)
+}
+
+func loginAdminHandler(w http.ResponseWriter, r *http.Request) {
+	var send error
+	if r.Method == http.MethodPost {
+		r.ParseForm()
+		_, err := adminLogin(r.Form.Get("username"), r.Form.Get("password"))
+		if err != nil {
+			send = err
+		} else {
+			cookie := http.Cookie{Name: "token", Path: "/", Value: "Admin"}
+			http.SetCookie(w, &cookie)
+
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
+	}
+
+	tmpl, _ := template.ParseFiles("templates/adminLogin.html")
 	tmpl.Execute(w, send)
 }
 
